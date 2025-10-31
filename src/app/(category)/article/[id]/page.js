@@ -20,12 +20,9 @@ export default async function ArticleDetailPage({ params }) {
 
   try {
     // Fetch all articles from the live API
-    const response = await getArticleDetailsById(id);
-    console.log("API response:", response.data.article);
-
-    article = response.data.article
-      ? transformNewsItem(response.data.article)
-      : null;
+    const response = await getArticleDetailsById(`690484e9fe1db65d1e601447`);
+    article = transformNewsItem(response.data);
+    console.log("article", article);
   } catch (error) {
     console.error("API fetch failed, falling back to static data:", error);
     // If the API fails, try to find the article in the static data

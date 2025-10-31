@@ -385,10 +385,9 @@ export const newsData = [
   },
 ];
 
-export const newsDataLive = async () => {
-  return await apiClient.get("articles/all");
+export const newsDataLive = async (page = 1) => {
+  return await apiClient.get(`articles/all?page=${page}`);
 };
-
 
 export const getBusinessArticles = async () => {
   return await apiClient.get("articles/category/Business");
@@ -398,7 +397,6 @@ export const getBhojpuriArticles = async () => {
   return await apiClient.get("articles/category/Bhojpuri");
 };
 
-
 export const getTechnologyArticles = async () => {
   return await apiClient.get("articles/category/Technology");
 };
@@ -407,4 +405,10 @@ export const getElectionsArticles = async () => {
   return await apiClient.get("articles/category/Elections");
 };
 
+export const getSportsArticles = async () => {
+  return await apiClient.get("articles/category/Sports");
+};
 
+export const getArticleDetailsById = async (id) => {
+  return await apiClient.get(`articles/${id}`);
+};

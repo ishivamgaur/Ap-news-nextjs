@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import Breadcrumb from "../components/Breadcrumb";
 import FeaturedNews from "../components/FeaturedNews";
 import NewsCard from "../components/NewsCard";
@@ -16,11 +16,13 @@ import FloatingVideoPlayer from "@/components/FloatingVideoPlayer";
 const Home = () => {
   const { language } = useLanguage();
   const [allNews, setAllNews] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [playingVideoId, setPlayingVideoId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [newsPage, setNewsPage] = useState(1);
   const [videoPage, setVideoPage] = useState(1);
-  const articlesPerPage = 6;
+  const [hasMoreNews, setHasMoreNews] = useState(true);
+  const observer = useRef();
 
   // This function transforms a single API article into the format our components expect.
   const transformNewsItem = (item) => ({
@@ -34,27 +36,57 @@ const Home = () => {
     youtubeVideoId: item.youtubeVideoId,
   });
 
-  // Fetch data on the client side
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await newsDataLive();
-        console.log("Raw API response:", response.data.items);
-        // The API response is an array directly, so we map over it.
-        const transformedNews = (response.data.items || []).map(transformNewsItem);  //Todo here i'll do it tommorrow
-        // const transformedNews = (response.data || []).map(transformNewsItem);
-        setAllNews(transformedNews);
-      } catch (error) {
-        console.error("Failed to fetch live news data:", error);
-        setAllNews(newsData); // Fallback to static data on error
-      } finally {
-        setIsLoading(false);
+  const fetchNews = useCallback(async (page) => {
+    if (page === 1) {
+      setIsInitialLoading(true);
+    } else {
+      setIsFetchingMore(true);
+    }
+    try {
+      const response = await newsDataLive(page);
+      console.log("Response:", response);
+      const newItems = response.data.data || [];
+      if (newItems.length === 0) {
+        setHasMoreNews(false);
+      } else {
+        const transformedNews = newItems.map(transformNewsItem);
+        setAllNews((prevNews) =>
+          page === 1 ? transformedNews : [...prevNews, ...transformedNews]
+        );
+        setNewsPage(page + 1);
       }
-    };
-
-    fetchData();
+    } catch (error) {
+      console.error("Failed to fetch live news data:", error);
+      if (page === 1) {
+        setAllNews(newsData); // Fallback to static data on initial load error
+      }
+      setHasMoreNews(false); // Stop fetching on error
+    } finally {
+      if (page === 1) {
+        setIsInitialLoading(false);
+      } else {
+        setIsFetchingMore(false);
+      }
+    }
   }, []);
+
+  useEffect(() => {
+    fetchNews(1);
+  }, [fetchNews]);
+
+  const lastNewsElementRef = useCallback(
+    (node) => {
+      if (isFetchingMore) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMoreNews) {
+          fetchNews(newsPage);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingMore, hasMoreNews, fetchNews, newsPage]
+  );
 
   const featuredNews = useMemo(() => allNews[0], [allNews]);
   const allOtherNews = useMemo(() => allNews.slice(1), [allNews]);
@@ -71,13 +103,6 @@ const Home = () => {
     return videoNews.slice(start, start + videosPerPage);
   }, [videoPage, videoNews, videosPerPage]);
 
-  // Pagination logic
-  const totalPages = Math.ceil(allOtherNews.length / articlesPerPage);
-  const currentArticles = useMemo(() => {
-    const startIndex = (currentPage - 1) * articlesPerPage;
-    return allOtherNews.slice(startIndex, startIndex + articlesPerPage);
-  }, [currentPage, allOtherNews, articlesPerPage]);
-
   const handlePlayVideo = (videoId) => {
     setPlayingVideoId(videoId);
   };
@@ -85,7 +110,7 @@ const Home = () => {
     setPlayingVideoId(null);
   };
 
-  if (isLoading) {
+  if (isInitialLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-xl">Loading...</div>
@@ -134,15 +159,27 @@ const Home = () => {
                     {language === "hi" ? "ताज़ा खबरें" : "Latest News"}
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {currentArticles.map((news) => (
-                      <NewsCard key={news.id} news={news} />
+                    {allOtherNews.map((news, index) => (
+                      <div
+                        key={news.id}
+                        ref={
+                          index === allOtherNews.length - 1
+                            ? lastNewsElementRef
+                            : null
+                        }
+                      >
+                        <NewsCard news={news} />
+                      </div>
                     ))}
                   </div>
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                  />
+                  {isFetchingMore && (
+                    <div className="text-center py-4">Loading more...</div>
+                  )}
+                  {!hasMoreNews && allNews.length > 1 && (
+                    <div className="text-center py-4">
+                      No more news to load.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

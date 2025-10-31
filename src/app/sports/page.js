@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import NewsCard from "../../components/NewsCard";
-import { newsData, newsDataLive } from "../../data/newsData";
+import { newsData, newsDataLive, getSportsArticles } from "../../data/newsData";
 
 const Sports = () => {
   const [sportsArticles, setSportsArticles] = useState([]);
@@ -22,8 +22,9 @@ const Sports = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await newsDataLive();
-        const allNews = (response.data.items || []).map(transformNewsItem);
+        const response = await getSportsArticles();
+        console.log("Live sports data response:", response);  
+        const allNews = (response.data.articles || []).map(transformNewsItem);
         const filteredNews = allNews.filter(
           (item) => item.category.toUpperCase() === "SPORTS"
         );
