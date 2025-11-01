@@ -5,15 +5,14 @@ import Image from "next/image";
 import ShareButtons from "@/components/ShareButtons";
 
 export default function ArticleClient({ article }) {
-  const {language} = useLanguage();
-console.log(article);
-
+  const { language } = useLanguage();
+  console.log(article);
 
   return (
     <div className="max-w-7xl mx-auto p-4">
       <h1 className="text-4xl font-bold mb-4">{article.title[language]}</h1>
       <Image
-        src={article.image}
+        src={article.image ? article.image : "/Ap-news-article.png"}
         alt={article.title[language]}
         width={800}
         height={450}

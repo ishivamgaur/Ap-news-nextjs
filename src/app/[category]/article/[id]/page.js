@@ -1,3 +1,5 @@
+const dynamic = "force-dynamic"
+
 import { newsData, newsDataLive, getArticleDetailsById } from "@/data/newsData";
 import ArticleClient from "./ArticleClient";
 
@@ -13,28 +15,26 @@ const transformNewsItem = (item) => ({
   youtubeVideoId: item.youtubeVideoId,
 });
 
+
 export default async function ArticleDetailPage({ params }) {
-  const { id } = await params;
-  console.log("id", id);
-  let article;
+  const { id, category } = await params; // ✅ no await here
+  console.log({id, category});
 
   try {
-    // Fetch all articles from the live API
     const response = await getArticleDetailsById(id);
-    console.log("API response:", response.data.article);
-
-    article = response.data.article
+    const article = response?.data?.article
       ? transformNewsItem(response.data.article)
       : null;
-  } catch (error) {
-    console.error("API fetch failed, falling back to static data:", error);
-    // If the API fails, try to find the article in the static data
-    article = newsData.find((item) => item.id == id);
-  }
 
-  if (!article) {
-    return <div className="text-center py-20">Article not found.</div>;
-  }
+      console.log("Fetched article:", article);
 
-  return <ArticleClient article={article} />;
+    if (!article) {
+      return <div>Article not found</div>;
+    }
+
+    return <ArticleClient article={article} />;
+  } catch (err) {
+    console.error("Error:", err);
+    return <div>Something went wrong</div>;
+  }
 }
