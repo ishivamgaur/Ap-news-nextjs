@@ -50,7 +50,7 @@ const NewsCard = ({news}) => {
           {news.description[language]}
         </p>
         <div className="mt-3 flex items-center justify-between">
-          <span className="text-xs text-gray-500 min-h-[16px]">
+          <span className="text-xs text-gray-500 min-h-4">
             {isClient &&
               new Date(news.date).toLocaleString("en-US", {
                 month: "short",
