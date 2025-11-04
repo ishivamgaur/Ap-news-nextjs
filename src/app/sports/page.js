@@ -61,12 +61,6 @@ const Sports = () => {
             </div>
           </>
         ) : sportsArticles.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sportsArticles.map((news) => (
-              <NewsCard key={news.id} news={news} />
-            ))}
-          </div>
-        ) : (
           <>
             <div className="mb-6">
               <h1 className="text-4xl font-bold text-gray-800 border-l-4 border-red-700 pl-4">
@@ -76,6 +70,14 @@ const Sports = () => {
                 Latest scores, highlights, and sports news
               </p>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sportsArticles.map((news) => (
+                <NewsCard key={news.id} news={news} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
             <div className="text-center col-span-full py-16">
               <h2 className="text-2xl font-semibold text-gray-700">
                 No Articles Found

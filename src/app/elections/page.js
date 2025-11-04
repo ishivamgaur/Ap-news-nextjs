@@ -64,7 +64,7 @@ const Elections = () => {
               ))}
             </div>
           </>
-        ) : (
+        ) : electionArticles.length > 0 ? (
           <>
             <div className="mb-6">
               <h1 className="text-4xl font-bold text-gray-800 border-l-4 border-red-700 pl-4">
@@ -79,6 +79,18 @@ const Elections = () => {
               {electionArticles.map((news) => (
                 <NewsCard key={news.id} news={news} />
               ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="text-center col-span-full py-16">
+              <h2 className="text-2xl font-semibold text-gray-700">
+                No Articles Found
+              </h2>
+              <p className="text-gray-500 mt-2">
+                There are currently no news articles available in this category.
+                Please check back later.
+              </p>
             </div>
           </>
         )}

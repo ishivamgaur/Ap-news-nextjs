@@ -1,7 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import NewsCard from "../../components/NewsCard";
-import { newsData, newsDataLive, getBusinessArticles } from "../../data/newsData";
+import {newsData, newsDataLive, getBusinessArticles} from "../../data/newsData";
 import NewsCardSkeleton from "../../components/NewsCardSkeleton";
 
 const BusinessPage = () => {
@@ -77,8 +77,13 @@ const BusinessPage = () => {
               </div>
             ) : (
               <div className="text-center col-span-full py-16">
-                <h2 className="text-2xl font-semibold text-gray-700">No Articles Found</h2>
-                <p className="text-gray-500 mt-2">There are currently no news articles available in this category. Please check back later.</p>
+                <h2 className="text-2xl font-semibold text-gray-700">
+                  No Articles Found
+                </h2>
+                <p className="text-gray-500 mt-2">
+                  There are currently no news articles available in this
+                  category. Please check back later.
+                </p>
               </div>
             )}
           </>
