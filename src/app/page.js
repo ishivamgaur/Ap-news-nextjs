@@ -1,149 +1,98 @@
 "use client";
 
-import {useState, useMemo, useEffect, useRef, useCallback} from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
+import { useGetAllNewsArticlesQuery } from "@/store/api/articleApi"; // adjust path
 import FeaturedNews from "../components/FeaturedNews";
 import NewsCard from "../components/NewsCard";
 import VideoCard from "../components/VideoCard";
 import VideoModal from "../components/VideoModal";
-import {newsData, newsDataLive} from "../data/newsData";
-import {useLanguage} from "../context/LanguageContext";
-import Pagination from "../components/Pagination";
 import Sidebar from "../components/SidebarScoreWidget";
 import RightSidebarNews from "@/components/RSidebarLatestNews";
 import FloatingVideoPlayer from "@/components/FloatingVideoPlayer";
+import Pagination from "../components/Pagination";
 import FeaturedNewsSkeleton from "../components/FeaturedNewsSkeleton";
 import VideoCardSkeleton from "../components/VideoCardSkeleton";
 import NewsCardSkeleton from "../components/NewsCardSkeleton";
+import { useLanguage } from "../context/LanguageContext";
 
 const Home = () => {
-  const {language} = useLanguage();
-  const [allNews, setAllNews] = useState([]);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [playingVideoId, setPlayingVideoId] = useState(null);
-  const [newsPage, setNewsPage] = useState(1);
-  const [videoPage, setVideoPage] = useState(1);
-  const [hasMoreNews, setHasMoreNews] = useState(true);
+  const { language } = useLanguage();
+  const [page, setPage] = useState(1);
   const observer = useRef();
+  const [playingVideoId, setPlayingVideoId] = useState(null);
+  const { data, isLoading, isFetching } = useGetAllNewsArticlesQuery(page);
+  console.log("Data", data);
 
-  // This function transforms a single API article into the format our components expect.
+  const allNews = data?.items || [];
+  const pagination = data?.pagination;
+  const hasMore = pagination?.hasNextPage || allNews.length === 10;
+
   const transformNewsItem = (item) => ({
-    id: item._id, // Map _id from API to id
+    id: item._id,
     title: item.title,
-    description: item.summary, // Map summary from API to description
-    fullDescription: item.content, // Map content from API to fullDescription
-    image: item.featuredImage?.url, // Map featuredImage.url from API to image
+    description: item.summary,
+    fullDescription: item.content,
+    image: item.featuredImage?.url,
     category: item.category,
-    date: item.publishAt, // Map publishAt to date
+    date: item.publishAt,
     youtubeVideoId: item.youtubeVideoId,
   });
 
-  const fetchNews = useCallback(async (page) => {
-    if (page === 1) {
-      setIsInitialLoading(true);
-    } else {
-      setIsFetchingMore(true);
-    }
-    try {
-      const response = await newsDataLive(page);
-      console.log("Response:", response);
-      const newItems = response.data.items || [];
-      if (newItems.length === 0) {
-        setHasMoreNews(false);
-      } else {
-        const transformedNews = newItems.map(transformNewsItem);
-        setAllNews((prevNews) =>
-          page === 1 ? transformedNews : [...prevNews, ...transformedNews]
-        );
-        setNewsPage(page + 1);
-      }
-    } catch (error) {
-      console.error("Failed to fetch live news data:", error);
-      if (page === 1) {
-        setAllNews(newsData); // Fallback to static data on initial load error
-      }
-      setHasMoreNews(false); // Stop fetching on error
-    } finally {
-      if (page === 1) {
-        setIsInitialLoading(false);
-      } else {
-        setIsFetchingMore(false);
-      }
-    }
-  }, []);
+  const transformedNews = allNews.map(transformNewsItem);
 
-  useEffect(() => {
-    fetchNews(1);
-  }, [fetchNews]);
-
+  // Observe last news card
   const lastNewsElementRef = useCallback(
     (node) => {
-      if (isFetchingMore) return;
+      if (isFetching) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMoreNews) {
-          fetchNews(newsPage);
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prev) => prev + 1);
         }
       });
       if (node) observer.current.observe(node);
     },
-    [isFetchingMore, hasMoreNews, fetchNews, newsPage]
+    [isFetching, hasMore]
   );
 
-  const featuredNews = useMemo(() => allNews[0], [allNews]);
-  const allOtherNews = useMemo(() => allNews.slice(1), [allNews]);
-  console.log("AllOtherNews:", allOtherNews);
+  const featuredNews = transformedNews[0];
+  const otherNews = transformedNews.slice(1);
+  const videoNews = transformedNews.filter((item) => item.youtubeVideoId);
+  const [videoPage, setVideoPage] = useState(1);
   const videosPerPage = 4;
-  const videoNews = useMemo(
-    () => allNews.filter((item) => item.youtubeVideoId),
-    [allNews]
-  );
 
   const totalVideoPages = Math.ceil(videoNews.length / videosPerPage);
   const currentVideos = useMemo(() => {
     const start = (videoPage - 1) * videosPerPage;
     return videoNews.slice(start, start + videosPerPage);
-  }, [videoPage, videoNews, videosPerPage]);
+  }, [videoPage, videoNews]);
 
-  const handlePlayVideo = (videoId) => {
-    setPlayingVideoId(videoId);
-  };
-  const handleCloseModal = () => {
-    setPlayingVideoId(null);
-  };
+  const handlePlayVideo = (id) => setPlayingVideoId(id);
+  const handleCloseModal = () => setPlayingVideoId(null);
 
-  if (isInitialLoading) {
+  // Skeleton state
+  if (isLoading && page === 1) {
     return (
       <div className="lg:flex">
         <Sidebar />
         <main className="flex-1 min-h-[60vh]">
           <div className="container mx-auto px-4">
-            <div className="bg-gray-50 min-h-screen">
-              <div className="max-w-7xl px-4 lg:px-4 mx-auto py-4">
-                {/* Featured News Skeleton */}
-                <div className="mb-12">
-                  <FeaturedNewsSkeleton />
+            <div className="bg-gray-50 min-h-screen py-4">
+              <div className="mb-12">
+                <FeaturedNewsSkeleton />
+              </div>
+              <div className="mb-12">
+                <div className="h-9 bg-gray-300 rounded w-64 border-l-4 border-gray-300 pl-4 mb-6 animate-pulse"></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[...Array(4)].map((_, i) => (
+                    <VideoCardSkeleton key={i} />
+                  ))}
                 </div>
-
-                {/* Video News Skeleton */}
-                <div className="mb-12">
-                  <div className="h-9 bg-gray-300 rounded w-64 border-l-4 border-gray-300 pl-4 mb-6 animate-pulse"></div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {[...Array(4)].map((_, index) => (
-                      <VideoCardSkeleton key={index} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Latest News Skeleton */}
-                <div>
-                  <div className="h-9 bg-gray-300 rounded w-64 border-l-4 border-gray-300 pl-4 mb-6 animate-pulse"></div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[...Array(6)].map((_, index) => (
-                      <NewsCardSkeleton key={index} />
-                    ))}
-                  </div>
-                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <NewsCardSkeleton key={i} />
+                ))}
               </div>
             </div>
           </div>
@@ -158,75 +107,62 @@ const Home = () => {
       <div className="lg:flex">
         <Sidebar />
         <main className="flex-1 min-h-[60vh]">
-          <div className="container mx-auto px-4">
-            <div className="bg-gray-50 min-h-screen">
-              <div className="max-w-7xl px-4 lg:px-4 mx-auto py-4">
-                {/* Featured News Section */}
-                <div className="mb-12">
-                  <FeaturedNews news={featuredNews} />
-                </div>
+          <div className="container mx-auto px-4 bg-gray-50 min-h-screen py-4">
+            {/* Featured */}
+            <div className="mb-12">
+              <FeaturedNews news={featuredNews} />
+            </div>
 
-                {/* Video News Section */}
-                <div className="mb-12">
-                  <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 mb-6">
-                    {language === "hi" ? "वीडियो समाचार" : "Video News"}
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {currentVideos.map((video) => (
-                      <VideoCard
-                        key={video.id}
-                        video={video}
-                        onPlay={handlePlayVideo}
-                      />
-                    ))}
-                  </div>
-                  <Pagination
-                    currentPage={videoPage}
-                    totalPages={totalVideoPages}
-                    onPageChange={setVideoPage}
-                  />
-                </div>
-
-                {/* Latest News Section */}
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 mb-6">
-                    {language === "hi" ? "ताज़ा खबरें" : "Latest News"}
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {allOtherNews.map((news, index) => (
-                      <div
-                        key={news.id}
-                        ref={
-                          index === allOtherNews.length - 1
-                            ? lastNewsElementRef
-                            : null
-                        }
-                      >
-                        <NewsCard news={news} />
-                      </div>
-                    ))}
-
-                    {isFetchingMore && (
-                      <>
-                        {[...Array(10)].map((_, index) => (
-                          <NewsCardSkeleton key={index} />
-                        ))}
-                      </>
-                    )}
-                  </div>
-
-                  {!hasMoreNews && allNews.length > 1 && (
-                    <div className="text-center py-4">
-                      No more news to load.
-                    </div>
-                  )}
-                </div>
+            {/* Videos */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 mb-6">
+                {language === "hi" ? "वीडियो समाचार" : "Video News"}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {currentVideos.map((v) => (
+                  <VideoCard key={v.id} video={v} onPlay={handlePlayVideo} />
+                ))}
               </div>
+              <Pagination
+                currentPage={videoPage}
+                totalPages={totalVideoPages}
+                onPageChange={setVideoPage}
+              />
+            </div>
+
+            {/* Latest News */}
+            <div>
+              <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 mb-6">
+                {language === "hi" ? "ताज़ा खबरें" : "Latest News"}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {otherNews.map((news, i) => (
+                  <div
+                    key={news.id}
+                    ref={i === otherNews.length - 1 ? lastNewsElementRef : null}
+                  >
+                    <NewsCard news={news} />
+                  </div>
+                ))}
+
+                {isFetching && (
+                  <>
+                    {[...Array(10)].map((_, i) => (
+                      <NewsCardSkeleton key={i} />
+                    ))}
+                  </>
+                )}
+              </div>
+
+              {!hasMore && transformedNews.length > 1 && (
+                <div className="text-center py-4">No more news to load.</div>
+              )}
             </div>
           </div>
         </main>
         <RightSidebarNews />
       </div>
+
       <FloatingVideoPlayer />
       <VideoModal videoId={playingVideoId} onClose={handleCloseModal} />
     </>
