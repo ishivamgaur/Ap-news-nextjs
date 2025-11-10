@@ -1,14 +1,13 @@
 "use client";
 
-import {useState, useEffect} from "react";
+import { useState, useCallback, useRef } from "react";
 import NewsCard from "@/components/NewsCard.jsx";
-import {newsData, newsDataLive} from "@/data/newsData.js";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton.jsx";
+import { useGetAllNewsArticlesQuery } from "@/store/api/articleApi.js";
 
 const AllNewsPage = () => {
-  const [articles, setArticles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [page, setPage] = useState(1);
+  const observer = useRef();
   const transformNewsItem = (item) => ({
     id: item._id,
     title: item.title,
@@ -20,29 +19,30 @@ const AllNewsPage = () => {
     youtubeVideoId: item.youtubeVideoId,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await newsDataLive();
-        const allNews = (response.data.items || []).map(transformNewsItem);
-        // For this page, we display all news, so no filtering is needed.
-        setArticles(allNews);
-      } catch (error) {
-        console.error("Failed to fetch live news data:", error);
-        // Fallback to static data on error
-        setArticles(newsData);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const { data, isLoading, isFetching, isError } =
+    useGetAllNewsArticlesQuery(page);
+
+  const articles = (data?.items || []).map(transformNewsItem);
+  const hasMore = data ? articles.length < data.total : false;
+
+  const lastNewsElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prev) => prev + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {isLoading ? (
+        {isLoading && page === 1 ? (
           <>
             {/* Skeleton for Header */}
             <div className="mb-6 animate-pulse">
@@ -51,27 +51,38 @@ const AllNewsPage = () => {
             </div>
             {/* Skeleton for News Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(10)].map((_, index) => (
+              {[...Array(9)].map((_, index) => (
                 <NewsCardSkeleton key={index} />
               ))}
             </div>
           </>
         ) : articles.length > 0 ? (
-          <>
-            <div className="mb-6">
-              <h1 className="text-4xl font-bold text-gray-800 border-l-4 border-red-700 pl-4">
-                Latest News
-              </h1>
-              <p className="text-gray-600 mt-2 pl-4">
-                All the latest updates and stories
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {articles.map((news) => (
-                <NewsCard key={news.id} news={news} />
-              ))}
-            </div>
-          </>
+          !isError ? (
+            <>
+              <div className="mb-6">
+                <h1 className="text-4xl font-bold text-gray-800 border-l-4 border-red-700 pl-4">
+                  Latest News
+                </h1>
+                <p className="text-gray-600 mt-2 pl-4">
+                  All the latest updates and stories
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {articles.map((news, i) => (
+                  <div
+                    key={news.id}
+                    ref={i === articles.length - 1 ? lastNewsElementRef : null}
+                  >
+                    <NewsCard news={news} />
+                  </div>
+                ))}
+                {isFetching &&
+                  [...Array(3)].map((_, index) => (
+                    <NewsCardSkeleton key={`skeleton-${index}`} />
+                  ))}
+              </div>
+            </>
+          ) : null
         ) : (
           <>
             <div className="text-center col-span-full py-16">

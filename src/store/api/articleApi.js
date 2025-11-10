@@ -35,58 +35,108 @@ export const articleApiSlice = createApi({
         url: `/articles/all?page=${page}`,
         method: "get",
       }),
-      // Normalize the response so the hook always returns { items, pagination }
-      transformResponse: (response) => response, // now `data` is stripped out
-
+      transformResponse: (response) => response,
       serializeQueryArgs: ({ endpointName }) => endpointName,
-
       merge: (currentCache, newItems, { arg }) => {
-        // When starting fresh (page 1), replace everything
-        if (arg === 1 || !currentCache?.items) {
-          return newItems;
-        }
-
-        // Append new articles
+        if (arg === 1 || !currentCache?.items) return newItems;
         currentCache.items.push(...newItems.items);
-
-        // Replace pagination info (optional)
-        currentCache.pagination = newItems.pagination;
+        currentCache.page = newItems.page;
+        currentCache.total = newItems.total;
+        currentCache.limit = newItems.limit;
       },
-
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
-
       providesTags: ["Articles"],
     }),
 
     //! GET BUISINESS ARTICLES
     getBusinessArticles: builder.query({
-      query: () => ({ url: "articles/category/Business", method: "get" }),
+      query: (page = 1) => ({
+        url: `/articles/category/Business?page=${page}`,
+        method: "get",
+      }),
+      transformResponse: (response) => response,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg === 1 || !currentCache?.articles) return newItems;
+        currentCache.articles.push(...newItems.articles);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
       providesTags: ["Articles"],
     }),
 
     //! GET BHOJPURI ARTICLES
     getBhojpuriArticles: builder.query({
-      query: () => ({ url: "articles/category/Bhojpuri", method: "get" }),
+      query: (page = 1) => ({
+        url: `/articles/category/Bhojpuri?page=${page}`,
+        method: "get",
+      }),
+      transformResponse: (response) => response,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg === 1 || !currentCache?.articles) return newItems;
+        currentCache.articles.push(...newItems.articles);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
       providesTags: ["Articles"],
     }),
 
     //! GET TECHNOLOGY ARTICLES
     getTechnologyArticles: builder.query({
-      query: () => ({ url: "articles/category/Technology", method: "get" }),
+      query: (page = 1) => ({
+        url: `/articles/category/Technology?page=${page}`,
+        method: "get",
+      }),
+      transformResponse: (response) => response,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg === 1 || !currentCache?.articles) return newItems;
+        currentCache.articles.push(...newItems.articles);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
       providesTags: ["Articles"],
     }),
 
     //! GET ELECTION ARTICLES
     getElectionsArticles: builder.query({
-      query: () => ({ url: "articles/category/Elections", method: "get" }),
+      query: (page = 1) => ({
+        url: `/articles/category/Elections?page=${page}`,
+        method: "get",
+      }),
+      transformResponse: (response) => response,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg === 1 || !currentCache?.articles) return newItems;
+        currentCache.articles.push(...newItems.articles);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
       providesTags: ["Articles"],
     }),
 
     //! GET SPORTS ARTICLES
     getSportsArticles: builder.query({
-      query: () => ({ url: "articles/category/Sports", method: "get" }),
+      query: (page = 1) => ({
+        url: `/articles/category/Sports?page=${page}`,
+        method: "get",
+      }),
+      transformResponse: (response) => response,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg === 1 || !currentCache?.articles) return newItems;
+        currentCache.articles.push(...newItems.articles);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
       providesTags: ["Articles"],
     }),
 

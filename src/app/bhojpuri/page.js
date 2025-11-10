@@ -1,13 +1,12 @@
 "use client";
-import {useState, useEffect} from "react";
+import { useState, useCallback, useRef } from "react";
 import NewsCard from "@/components/NewsCard";
-import {newsData, newsDataLive, getBhojpuriArticles} from "@/data/newsData";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton";
+import { useGetBhojpuriArticlesQuery } from "@/store/api/articleApi";
 
 const BhojpuriPage = () => {
-  const [bhojpuriArticles, setBhojpuriArticles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [page, setPage] = useState(1);
+  const observer = useRef();
   const transformNewsItem = (item) => ({
     id: item._id,
     title: item.title,
@@ -19,34 +18,30 @@ const BhojpuriPage = () => {
     youtubeVideoId: item.youtubeVideoId,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await getBhojpuriArticles();
-        console.log("Response in BhojpuriPage:", response.data);
-        const allNews = (response.data.articles || []).map(transformNewsItem);
-        const filteredNews = allNews.filter(
-          (item) => item.category.toUpperCase() === "BHOJPURI"
-        );
-        setBhojpuriArticles(filteredNews);
-      } catch (error) {
-        console.error("Failed to fetch live news data:", error);
-        const filteredStaticNews = newsData.filter(
-          (item) => item.category.toUpperCase() === "BHOJPURI"
-        );
-        setBhojpuriArticles(filteredStaticNews);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const { data, isLoading, isFetching, isError } =
+    useGetBhojpuriArticlesQuery(page);
+
+  const articles = (data?.articles || []).map(transformNewsItem);
+  const hasMore = data ? articles.length < data.total : false;
+
+  const lastNewsElementRef = useCallback(
+    (node) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prev) => prev + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, hasMore]
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {isLoading ? (
+        {isLoading && page === 1 ? (
           <>
             {/* Skeleton for Header */}
             <div className="mb-6 animate-pulse">
@@ -55,27 +50,38 @@ const BhojpuriPage = () => {
             </div>
             {/* Skeleton for News Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(10)].map((_, index) => (
+              {[...Array(9)].map((_, index) => (
                 <NewsCardSkeleton key={index} />
               ))}
             </div>
           </>
-        ) : bhojpuriArticles.length > 0 ? (
-          <>
-            <div className="mb-6">
-              <h1 className="text-4xl font-bold text-gray-800 border-l-4 border-red-700 pl-4">
-                Bhojpuri
-              </h1>
-              <p className="text-gray-600 mt-2 pl-4">
-                Entertainment, music, and news from the Bhojpuri world
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {bhojpuriArticles.map((news) => (
-                <NewsCard key={news.id} news={news} />
-              ))}
-            </div>
-          </>
+        ) : articles.length > 0 ? (
+          !isError ? (
+            <>
+              <div className="mb-6">
+                <h1 className="text-4xl font-bold text-gray-800 border-l-4 border-red-700 pl-4">
+                  Bhojpuri
+                </h1>
+                <p className="text-gray-600 mt-2 pl-4">
+                  Entertainment, music, and news from the Bhojpuri world
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {articles.map((news, i) => (
+                  <div
+                    key={news.id}
+                    ref={i === articles.length - 1 ? lastNewsElementRef : null}
+                  >
+                    <NewsCard news={news} />
+                  </div>
+                ))}
+                {isFetching &&
+                  [...Array(3)].map((_, index) => (
+                    <NewsCardSkeleton key={`skeleton-${index}`} />
+                  ))}
+              </div>
+            </>
+          ) : null
         ) : (
           <>
             <div className="text-center col-span-full py-16">

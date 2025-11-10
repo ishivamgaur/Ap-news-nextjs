@@ -21,11 +21,11 @@ const Home = () => {
   const observer = useRef();
   const [playingVideoId, setPlayingVideoId] = useState(null);
   const { data, isLoading, isFetching } = useGetAllNewsArticlesQuery(page);
-  console.log("Data", data);
-
   const allNews = data?.items || [];
-  const pagination = data?.pagination;
-  const hasMore = pagination?.hasNextPage || allNews.length === 10;
+
+  const total = data?.total || 0;
+  const limit = data?.limit || 10;
+  const hasMore = allNews.length < total && total > 0;
 
   const transformNewsItem = (item) => ({
     id: item._id,
@@ -90,7 +90,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                   <NewsCardSkeleton key={i} />
                 ))}
               </div>
@@ -147,7 +147,7 @@ const Home = () => {
 
                 {isFetching && (
                   <>
-                    {[...Array(10)].map((_, i) => (
+                    {[...Array(5)].map((_, i) => (
                       <NewsCardSkeleton key={i} />
                     ))}
                   </>
