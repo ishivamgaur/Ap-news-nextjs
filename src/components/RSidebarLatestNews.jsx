@@ -100,6 +100,9 @@ const RightSidebarNews = () => {
     // =======
   }, [langParam]);
 
+
+  console.log("Right side bar news", news)
+
   return (
     <aside
       className={
@@ -173,7 +176,7 @@ const RightSidebarNews = () => {
                 className="mb-3 p-3 border border-gray-300 rounded-md hover:shadow-md transition-shadow bg-white"
               >
                 <Link
-                  href={`/news/article/${item.article_id}`}
+                  target="_blank" href={`${item.link}`}
                   className="text-sm font-medium text-red-600 hover:underline"
                 >
                   {item.title}
