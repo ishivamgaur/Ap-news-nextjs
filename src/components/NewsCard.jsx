@@ -5,7 +5,6 @@ import ShareButtons from "./ShareButtons";
 const VIEWS_KEY = "apnews_views";
 
 const NewsCard = ({news}) => {
-  console.log("Rendering NewsCard for news: ", news);
   const {language} = useLanguage();
   const [isClient, setIsClient] = useState(false);
 

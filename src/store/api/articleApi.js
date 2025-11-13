@@ -145,6 +145,12 @@ export const articleApiSlice = createApi({
       query: (id) => ({ url: `articles/${id}`, method: "get" }),
       providesTags: ["Articles"],
     }),
+
+    //! GET VIDEOS ARTICLES
+    getVideosArticles: builder.query({
+      query: () => ({ url: `/articles/allvideos`, method: "get" }),
+      providesTags: ["Articles"],
+    })
   }),
 });
 
@@ -156,4 +162,5 @@ export const {
   useGetElectionsArticlesQuery,
   useGetSportsArticlesQuery,
   useGetArticleByIdQuery,
+  useGetVideosArticlesQuery
 } = articleApiSlice;

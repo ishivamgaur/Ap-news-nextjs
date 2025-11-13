@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useMemo, useRef, useCallback } from "react";
-import { useGetAllNewsArticlesQuery } from "@/store/api/articleApi"; // adjust path
+import {
+  useGetAllNewsArticlesQuery,
+  useGetVideosArticlesQuery,
+} from "@/store/api/articleApi"; // adjust path
 import FeaturedNews from "../components/FeaturedNews";
 import NewsCard from "../components/NewsCard";
 import VideoCard from "../components/VideoCard";
@@ -21,7 +24,13 @@ const Home = () => {
   const observer = useRef();
   const [playingVideoId, setPlayingVideoId] = useState(null);
   const { data, isLoading, isFetching } = useGetAllNewsArticlesQuery(page);
+  const {
+    data: videoDAta,
+    isLoading: isVideoLoading,
+  } = useGetVideosArticlesQuery();
   const allNews = data?.items || [];
+  const allVideosArtciles = videoDAta?.articles || [];
+  console.log("videoData", videoDAta);
 
   const total = data?.total || 0;
   const limit = data?.limit || 10;
@@ -39,6 +48,8 @@ const Home = () => {
   });
 
   const transformedNews = allNews.map(transformNewsItem);
+  const transformedVideoArticles = allVideosArtciles.map(transformNewsItem);
+  console.log("transformedVideoArticles", transformedVideoArticles);
 
   // Observe last news card
   const lastNewsElementRef = useCallback(
@@ -57,7 +68,7 @@ const Home = () => {
 
   const featuredNews = transformedNews[0];
   const otherNews = transformedNews.slice(1);
-  const videoNews = transformedNews.filter((item) => item.youtubeVideoId);
+  const videoNews = transformedVideoArticles;
   const [videoPage, setVideoPage] = useState(1);
   const videosPerPage = 4;
 
@@ -71,7 +82,7 @@ const Home = () => {
   const handleCloseModal = () => setPlayingVideoId(null);
 
   // Skeleton state
-  if (isLoading && page === 1) {
+  if (isLoading && isVideoLoading && page === 1) {
     return (
       <div className="lg:flex">
         <Sidebar />

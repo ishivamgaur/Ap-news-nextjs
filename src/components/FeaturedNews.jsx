@@ -3,7 +3,6 @@ import {useLanguage} from "../context/LanguageContext";
 
 const FeaturedNews = ({news}) => {
   const {language} = useLanguage();
-  console.log("FeaturedNews news prop:", news);
 
   if (!news) return null; // Add a guard clause in case news is not available
 
