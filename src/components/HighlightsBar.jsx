@@ -108,10 +108,10 @@ const HighlightsBar = () => {
   };
 
   return (
-    <div className="highlights-bar h-16 flex items-center group fixed bottom-0 left-0 right-0 bg-red-900 text-white z-50 shadow-lg">
+    <div className="highlights-bar h-10 flex items-center group fixed bottom-0 left-0 right-0 bg-red-900 text-white z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 flex items-center h-14">
         <div className="flex-shrink-0">
-          <span className="font-bold bg-white text-red-800 px-3 py-1.5 text-sm rounded">
+          <span className="font-bold bg-white text-red-800 px-3 py-[4px] text-sm rounded">
             {language === "hi" ? "हाइलाइट" : "HIGHLIGHTS"}
           </span>
         </div>
@@ -128,7 +128,7 @@ const HighlightsBar = () => {
                 <Link
                   href={getHref(item)}
                   key={`first-${item.id || item.article_id || index}`}
-                  className="mx-6 text-md font-bold hover:underline flex-shrink-0"
+                  className="mx-6 text-sm font-bold hover:underline flex-shrink-0"
                   target={item.link ? "_blank" : ""}
                   rel={item.link ? "noopener noreferrer" : ""}
                 >
