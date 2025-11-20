@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-import StoreProvider from "@/store/StoreProvider"
+import StoreProvider from "@/store/StoreProvider";
 import { LanguageProvider } from "@/context/LanguageContext";
 import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
@@ -30,6 +30,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5516481292318087"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
