@@ -159,23 +159,27 @@ const RightSidebarNews = () => {
 
   return (
     <aside
-      className={
-        "hidden lg:flex flex-col w-64 bg-white border-l  p-2 py-4 border-gray-300 overflow-y-auto shadow-lg "
-      }
+      className="hidden lg:flex flex-col sticky top-16 w-64 border-l p-2 py-4 border-gray-300 shadow-lg"
+      style={{ height: "calc(100vh - 4rem)" }} // 100vh - top-16 (4rem)
     >
-      <div className="flex flex-col gap-4">
-        <p className="text-gray-600 text-xl font-semibold">
-          {isLive && currentVideoId === liveVideoId
-            ? "Live Video"
-            : "Latest Video"}
-        </p>
+      {/* Non-scrollable Video Section */}
+      <div className="shrink-0">
+        <div className="flex flex-col gap-4">
+          <p className="text-gray-600 text-xl font-semibold">
+            {isLive && currentVideoId === liveVideoId
+              ? "Live Video"
+              : "Latest Video"}
+          </p>
 
-        <div className=" bg-black aspect-video rounded-lg overflow-hidden shadow-lg flex items-center justify-center">
-          {renderPlayer()}
+          <div className="bg-black aspect-video rounded-lg overflow-hidden shadow-lg flex items-center justify-center">
+            {renderPlayer()}
+          </div>
         </div>
+      </div>
 
-        {/* News */}
-        <div className="p-2 pb-4 bg-gray-100 rounded-md">
+      {/* Scrollable News and Ads Section */}
+      <div className="grow overflow-y-auto mt-4 space-y-4 pb-20">
+        <div className="px-0 py-2 pb-4 rounded-md">
           <div className="mb-3">
             <h2 className="text-lg font-bold text-red-700 text-left">
               {language === "hi"
@@ -190,11 +194,11 @@ const RightSidebarNews = () => {
             </p>
           )}
 
-          <div className="overflow-y-scroll max-h-[500px]">
+          <div className="space-y-3">
             {news.map((item, index) => (
               <div
                 key={index}
-                className="mb-3 p-3 border border-gray-300 rounded-md hover:shadow-md transition-shadow bg-white"
+                className="p-3 border border-gray-300 rounded-md hover:shadow-md transition-shadow bg-white"
               >
                 <Link
                   target="_blank"
@@ -210,20 +214,32 @@ const RightSidebarNews = () => {
             ))}
           </div>
         </div>
+
+        <div className="px-0 py-2 rounded-md space-y-4">
+          {/* Our ads */}
+          <AdComponent
+            adImage="https://api.microlink.io/?url=https://www.oyorooms.com&screenshot=true&embed=screenshot.url"
+            title="Oyo Rooms"
+            adLink="https://www.oyorooms.com/"
+          />
+
+          <AdComponent
+            adImage="https://api.microlink.io/?url=https://www.cardekho.com&screenshot=true&embed=screenshot.url"
+            title="CarDekho"
+            adLink="https://www.cardekho.com/"
+          />
+          <AdComponent
+            adImage="https://api.microlink.io/?url=https://www.uber.com/in/en/&screenshot=true&embed=screenshot.url"
+            title="Uber"
+            adLink="https://www.uber.com/in/en/"
+          />
+          <AdComponent
+            adImage="https://api.microlink.io/?url=https://in.bookmyshow.com&screenshot=true&embed=screenshot.url"
+            title="BookMyShow"
+            adLink="https://in.bookmyshow.com/"
+          />
+        </div>
       </div>
-
-      {/* Our ads */}
-      <AdComponent
-        adImage="https://image.thum.io/get/width/240/crop/1200/https://www.oyorooms.com/"
-        title="Oyo Rooms"
-        adLink="https://www.oyorooms.com/"
-      />
-
-      <AdComponent
-        adImage="https://image.thum.io/get/width/240/crop/1200/https://www.cardekho.com/"
-        title="CarDekho"
-        adLink="https://www.cardekho.com/"
-      />
 
       {/* MostRead removed */}
     </aside>
