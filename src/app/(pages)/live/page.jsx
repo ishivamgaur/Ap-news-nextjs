@@ -40,10 +40,14 @@ const LiveNewsPage = () => {
   const [isJoinPopupOpen, setIsJoinPopupOpen] = useState(false);
 
   // Effect to set the initial video (Live > First Recent)
+  // Effect to set the initial video (Live > First Recent)
   useEffect(() => {
+    // If a video is already selected (by user or previous default), don't override it
+    if (currentVideoId) return;
+
     if (liveVideoId) {
       setCurrentVideoId(liveVideoId);
-    } else if (!isLiveLoading && recentVideos.length > 0 && !currentVideoId) {
+    } else if (!isLiveLoading && recentVideos.length > 0) {
       // If not live and recent videos are loaded, default to the first one
       setCurrentVideoId(recentVideos[0]?.id?.videoId);
     }
