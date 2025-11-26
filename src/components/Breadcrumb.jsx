@@ -23,19 +23,19 @@ const Breadcrumb = () => {
 
   return (
     <div className="bg-gray-50 py-4">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav
           aria-label="Breadcrumb"
-          className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-white shadow-sm"
+          className="flex py-3 text-gray-700 overflow-x-auto whitespace-nowrap scrollbar-hide"
         >
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li className="inline-flex items-center">
               <Link
                 href="/"
                 className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-red-700 transition-colors"
+                title={translations[language].home}
               >
-                <FaHome className="w-4 h-4 me-2" />
-                {translations[language].home}
+                <FaHome className="w-4 h-4" />
               </Link>
             </li>
             {pathnames.map((name, index) => {
@@ -59,8 +59,8 @@ const Breadcrumb = () => {
               }
 
               const truncatedName =
-                displayName.length > 15
-                  ? displayName.slice(0, 15) + "..."
+                displayName.length > 5
+                  ? displayName.slice(0, 5) + "..."
                   : displayName;
 
               return (
