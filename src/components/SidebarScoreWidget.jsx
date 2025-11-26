@@ -38,14 +38,14 @@ const SidebarScoreWidget = () => {
   // --- End of Countdown Logic ---
 
   return (
-    <aside className="hidden lg:flex flex-col sticky top-24 lg:w-48 xl:w-68 p-4 bg-white rounded-xl border border-gray-100 shadow-sm h-[calc(100vh-6rem)]">
+    <aside className="hidden xl:flex flex-col sticky top-20 lg:w-64 xl:w-60 2xl:w-64 p-4 bg-white rounded-xl border border-gray-100 shadow-sm h-[calc(100vh-6rem)]">
       {/* Election Countdown Section */}
       <div className="shrink-0 mb-6">
         <div className="p-5 border border-red-100 rounded-xl bg-red-50/50 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-red-100 rounded-full blur-xl opacity-50"></div>
 
           <div className="flex mb-4 justify-between items-center">
-            <h3 className="font-serif font-bold text-red-800 text-base lg:text-sm xl:text-lg">
+            <h3 className="font-serif font-bold text-red-800 text-base lg:text-xs xl:text-lg">
               {language === "hi" ? "चुनाव 2025" : "Election 2025"}
             </h3>
             <span className="relative flex h-3 w-3">
@@ -61,10 +61,10 @@ const SidebarScoreWidget = () => {
                   key={unit}
                   className="bg-white p-2 rounded-lg shadow-sm border border-red-100 flex flex-col items-center justify-center"
                 >
-                  <div className="text-xl lg:text-lg xl:text-xl font-bold text-red-700 font-mono leading-none mb-1">
+                  <div className="text-xl lg:text-sm xl:text-xl font-bold text-red-700 font-mono leading-none mb-1">
                     {value}
                   </div>
-                  <div className="text-[10px] lg:text-[9px] xl:text-[10px] text-gray-500 uppercase font-bold tracking-wider">
+                  <div className="text-[10px] lg:text-[8px] xl:text-[10px] text-gray-500 uppercase font-bold tracking-wider">
                     {language === "hi"
                       ? {
                           days: "दिन",
@@ -80,7 +80,7 @@ const SidebarScoreWidget = () => {
           ) : (
             <Link
               href={"/election-results"}
-              className="text-lg lg:text-base xl:text-lg text-center block hover:underline text-red-700 font-bold bg-white py-2 rounded-lg shadow-sm border border-red-100"
+              className="text-lg lg:text-sm xl:text-lg text-center block hover:underline text-red-700 font-bold bg-white py-2 rounded-lg shadow-sm border border-red-100"
             >
               {language === "hi" ? "चुनाव परिणाम देखें" : "View Results"}
             </Link>
@@ -94,7 +94,7 @@ const SidebarScoreWidget = () => {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <div className="w-1 h-5 bg-red-700 rounded-full"></div>
-            <h2 className="text-lg lg:text-base xl:text-lg font-bold text-gray-900">
+            <h2 className="text-lg lg:text-sm xl:text-lg font-bold text-gray-900">
               {language === "hi" ? "लाइव स्कोर" : "Live Scores"}
             </h2>
           </div>

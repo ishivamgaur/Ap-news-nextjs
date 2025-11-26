@@ -114,13 +114,13 @@ const Home = () => {
               </div>
               <div className="mb-12">
                 <div className="h-9 bg-gray-300 rounded w-64 border-l-4 border-gray-300 pl-4 mb-6 animate-pulse"></div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
                   {[...Array(4)].map((_, i) => (
                     <VideoCardSkeleton key={i} />
                   ))}
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {[...Array(5)].map((_, i) => (
                   <NewsCardSkeleton key={i} />
                 ))}
@@ -149,7 +149,7 @@ const Home = () => {
               <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 mb-6">
                 {language === "hi" ? "वीडियो समाचार" : "Video News"}
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
                 {currentVideos.map((v) => (
                   <VideoCard key={v.id} video={v} onPlay={handlePlayVideo} />
                 ))}
@@ -166,7 +166,7 @@ const Home = () => {
               <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 mb-6">
                 {language === "hi" ? "ताज़ा खबरें" : "Latest News"}
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {otherNews.map((news, i) => (
                   <div
                     key={news.id}

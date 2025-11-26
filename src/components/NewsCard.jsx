@@ -27,7 +27,7 @@ const NewsCard = ({ news }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group">
-      <div className="relative h-52 overflow-hidden">
+      <div className="relative h-48 overflow-hidden">
         <Link
           href={
             news.category == "General"
@@ -45,15 +45,15 @@ const NewsCard = ({ news }) => {
             }}
           />
         </Link>
-        <span className="absolute top-3 left-3 bg-linear-to-r from-red-600 to-red-700 text-white px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full shadow-md">
+        <span className="absolute top-3 left-3 bg-linear-to-r from-red-600 to-red-700 text-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full shadow-md">
           {news.category
             .split(" ")
             .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
             .join(" ")}
         </span>
       </div>
-      <div className="p-5 flex flex-col h-[calc(100%-13rem)]">
-        <h3 className="font-bold text-xl lg:text-lg xl:text-xl mb-3 line-clamp-2 text-gray-900 group-hover:text-red-700 transition-colors leading-tight">
+      <div className="p-4 flex flex-col h-[calc(100%-12rem)]">
+        <h3 className="font-bold text-sm lg:text-sm xl:text-base mb-2 line-clamp-2 text-gray-900 group-hover:text-red-700 transition-colors leading-tight">
           <Link
             href={
               news.category == "General"
@@ -65,13 +65,13 @@ const NewsCard = ({ news }) => {
           </Link>
         </h3>
         <div className="grow">
-          <p className="text-gray-600 text-sm lg:text-xs xl:text-sm font-medium line-clamp-3 mb-2">
+          <p className="text-gray-600 text-[10px] lg:text-[10px] xl:text-[11px] font-medium line-clamp-3 mb-2">
             {news.description[language]}
           </p>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-          <span className="text-xs lg:text-[10px] xl:text-xs text-gray-400 font-medium">
+        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+          <span className="text-[9px] lg:text-[8px] xl:text-[9px] text-gray-400 font-medium">
             {isClient &&
               new Date(news.date).toLocaleString("en-US", {
                 month: "short",
@@ -79,7 +79,7 @@ const NewsCard = ({ news }) => {
                 year: "numeric",
               })}
           </span>
-          <div className="flex items-center space-x-3 lg:space-x-2 xl:space-x-3">
+          <div className="flex items-center space-x-2">
             <Link
               href={
                 news.category == "General"
@@ -87,7 +87,7 @@ const NewsCard = ({ news }) => {
                   : `/${news.category.toLowerCase()}/article/${news.id}`
               }
               onClick={recordView}
-              className="text-white bg-red-700 hover:bg-red-800 px-4 py-1.5 rounded-full text-xs lg:text-[10px] xl:text-xs font-bold transition-colors shadow-sm hover:shadow-md"
+              className="text-white bg-red-700 hover:bg-red-800 px-3 py-1 rounded-full text-[9px] lg:text-[8px] xl:text-[9px] font-bold transition-colors shadow-sm hover:shadow-md"
             >
               {language === "hi" ? "और पढ़ें" : "Read More"}
             </Link>

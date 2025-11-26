@@ -183,7 +183,7 @@ const RightSidebarNews = () => {
 
   return (
     <aside
-      className="hidden lg:flex flex-col sticky top-20 lg:w-48 xl:w-62 border-l p-2 py-4 border-gray-300 shadow-lg"
+      className="hidden lg:flex flex-col sticky top-20 lg:w-64 xl:w-52 2xl:w-64 border-l p-2 py-4 border-gray-300 shadow-lg"
       style={{ height: "calc(100vh - 4rem)" }} // 100vh - top-16 (4rem)
     >
       {/* Non-scrollable Video Section */}
@@ -205,7 +205,7 @@ const RightSidebarNews = () => {
       <div className="grow overflow-y-auto mt-4 space-y-4 pb-20">
         <div className="px-0 py-2 pb-4 rounded-md">
           <div className="mb-3">
-            <h2 className="text-base lg:text-sm xl:text-lg font-bold text-red-700 text-left">
+            <h2 className="text-base lg:text-xs xl:text-lg font-bold text-red-700 text-left">
               {language === "hi"
                 ? "नवीनतम बिहार और झारखंड राजनीति"
                 : "Latest Bihar & Jharkhand Politics"}
@@ -227,11 +227,11 @@ const RightSidebarNews = () => {
                 <Link
                   target="_blank"
                   href={`${item.link}`}
-                  className="text-xs lg:text-[11px] xl:text-sm font-medium text-red-600 hover:underline"
+                  className="text-xs lg:text-[10px] xl:text-sm font-medium text-red-600 hover:underline"
                 >
                   {item.title}
                 </Link>
-                <p className="text-[10px] lg:text-[9px] xl:text-xs text-gray-500 mt-1">
+                <p className="text-[10px] lg:text-[8px] xl:text-xs text-gray-500 mt-1">
                   {item.pubDate ? new Date(item.pubDate).toLocaleString() : ""}
                 </p>
               </div>
