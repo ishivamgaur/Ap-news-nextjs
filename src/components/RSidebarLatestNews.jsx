@@ -113,6 +113,7 @@ const RightSidebarNews = () => {
       // If cache is old or doesn't exist, fetch new news
       try {
         // Fetch both languages at once
+        // For Hindi, we might need a broader query if the specific one fails, but let's try the same first.
         const [enResponse, hiResponse] = await Promise.all([
           fetch(
             `https://newsdata.io/api/1/latest?apikey=${API_KEY}&language=en&q=bihar%20jharkhand%20politics`,
@@ -124,15 +125,38 @@ const RightSidebarNews = () => {
           ),
         ]);
 
-        if (!enResponse.ok || !hiResponse.ok) throw new Error(`HTTP error`);
-        const enData = await enResponse.json();
-        const hiData = await hiResponse.json();
-        if (enData.results && hiData.results) {
+        const enData = enResponse.ok
+          ? await enResponse.json()
+          : { results: [] };
+        const hiData = hiResponse.ok
+          ? await hiResponse.json()
+          : { results: [] };
+
+        // Fallback for Hindi if specific query returns empty
+        let finalHiResults = hiData.results || [];
+        if (finalHiResults.length === 0) {
+          try {
+            const hiFallbackResponse = await fetch(
+              `https://newsdata.io/api/1/latest?apikey=${API_KEY}&language=hi&category=politics`,
+              { signal }
+            );
+            if (hiFallbackResponse.ok) {
+              const hiFallbackData = await hiFallbackResponse.json();
+              finalHiResults = hiFallbackData.results || [];
+            }
+          } catch (e) {
+            console.error("Hindi fallback fetch failed", e);
+          }
+        }
+
+        if (enData.results || finalHiResults.length > 0) {
           const newsToCache = {
-            en: enData.results.slice(0, 10),
-            hi: hiData.results.slice(0, 10),
+            en: enData.results ? enData.results.slice(0, 10) : [],
+            hi: finalHiResults.slice(0, 10),
           };
-          setNews(newsToCache[langParam]); // Set current language news
+
+          setNews(newsToCache[langParam] || []); // Set current language news
+
           localStorage.setItem(
             cacheKey,
             JSON.stringify({
@@ -159,7 +183,7 @@ const RightSidebarNews = () => {
 
   return (
     <aside
-      className="hidden lg:flex flex-col sticky top-16 w-64 border-l p-2 py-4 border-gray-300 shadow-lg"
+      className="hidden lg:flex flex-col sticky top-20 lg:w-48 xl:w-62 border-l p-2 py-4 border-gray-300 shadow-lg"
       style={{ height: "calc(100vh - 4rem)" }} // 100vh - top-16 (4rem)
     >
       {/* Non-scrollable Video Section */}
@@ -181,7 +205,7 @@ const RightSidebarNews = () => {
       <div className="grow overflow-y-auto mt-4 space-y-4 pb-20">
         <div className="px-0 py-2 pb-4 rounded-md">
           <div className="mb-3">
-            <h2 className="text-lg font-bold text-red-700 text-left">
+            <h2 className="text-base lg:text-sm xl:text-lg font-bold text-red-700 text-left">
               {language === "hi"
                 ? "नवीनतम बिहार और झारखंड राजनीति"
                 : "Latest Bihar & Jharkhand Politics"}
@@ -203,11 +227,11 @@ const RightSidebarNews = () => {
                 <Link
                   target="_blank"
                   href={`${item.link}`}
-                  className="text-sm font-medium text-red-600 hover:underline"
+                  className="text-xs lg:text-[11px] xl:text-sm font-medium text-red-600 hover:underline"
                 >
                   {item.title}
                 </Link>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-[10px] lg:text-[9px] xl:text-xs text-gray-500 mt-1">
                   {item.pubDate ? new Date(item.pubDate).toLocaleString() : ""}
                 </p>
               </div>

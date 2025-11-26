@@ -23,7 +23,7 @@ const ShareButtons = ({ title, url }) => {
   return (
     <button
       onClick={handleShare}
-      className="px-3 py-1 bg-gray-100 rounded text-sm text-gray-700 hover:bg-gray-200"
+      className="px-3 py-1 lg:px-2 lg:py-0.5 bg-gray-100 rounded text-sm lg:text-xs xl:text-sm text-gray-700 hover:bg-gray-200 transition-colors"
     >
       Share
     </button>

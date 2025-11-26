@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaTimes, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { disableFloatingVideo } from "@/store/uiSlice";
 
 const FloatingVideoPlayer = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const dispatch = useDispatch();
+  const isEnabled = useSelector((state) => state.ui.isFloatingVideoEnabled);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
 
@@ -13,7 +16,11 @@ const FloatingVideoPlayer = () => {
     }
   }, [isMuted]);
 
-  if (!isOpen) {
+  const handleClose = () => {
+    dispatch(disableFloatingVideo());
+  };
+
+  if (!isEnabled) {
     return null;
   }
 
@@ -21,7 +28,7 @@ const FloatingVideoPlayer = () => {
     <div className="fixed bottom-12 right-4 w-60 md:w-60 rounded-lg shadow-2xl z-50  animate-fade-in-up ">
       <div className="relative rounded-lg ">
         <button
-          onClick={() => setIsOpen(false)}
+          onClick={handleClose}
           className="absolute top-2 right-2 cursor-pointer z-10 bg-black/50 text-white rounded-full p-1.5 hover:bg-black/75 transition-colors"
           aria-label="Close video player"
         >

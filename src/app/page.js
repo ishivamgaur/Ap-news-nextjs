@@ -5,6 +5,8 @@ import {
   useGetAllNewsArticlesQuery,
   useGetVideosArticlesQuery,
 } from "@/store/api/articleApi"; // adjust path
+import { useDispatch, useSelector } from "react-redux";
+import { setHomeFeedPage } from "@/store/uiSlice";
 import FeaturedNews from "../components/FeaturedNews";
 import NewsCard from "../components/NewsCard";
 import VideoCard from "../components/VideoCard";
@@ -20,17 +22,36 @@ import { useLanguage } from "../context/LanguageContext";
 
 const Home = () => {
   const { language } = useLanguage();
-  const [page, setPage] = useState(1);
-  const observer = useRef();
+  const dispatch = useDispatch();
+  const homeFeedPage = useSelector((state) => state.ui.homeFeedPage);
   const [playingVideoId, setPlayingVideoId] = useState(null);
-  const { data, isLoading, isFetching } = useGetAllNewsArticlesQuery(page);
-  const {
-    data: videoDAta,
-    isLoading: isVideoLoading,
-  } = useGetVideosArticlesQuery();
+  const observer = useRef();
+
+  // We use a local state to track if we are initializing to avoid double fetch if needed,
+  // but RTK Query handles caching.
+  // The query hook needs the *current* page to fetch.
+  // If we want to load *up to* page N, we might need a different approach or just rely on the fact
+  // that we want to fetch page N when we scroll.
+  // Actually, standard infinite scroll with RTK Query usually involves fetching page 1, then 2, etc.
+  // If we come back and `homeFeedPage` is 5, we might miss pages 1-4 if we just fetch 5.
+  // BUT, `getAllNewsArticles` cache is keyed by the endpoint name (shared cache).
+  // So if the cache exists in the store, `useGetAllNewsArticlesQuery(page)` might just return the cached data
+  // for that specific page arg?
+  // Wait, `serializeQueryArgs: ({ endpointName }) => endpointName` means all pages share the SAME cache entry.
+  // So `useGetAllNewsArticlesQuery(1)` and `useGetAllNewsArticlesQuery(5)` write to the SAME cache.
+  // So if we just call `useGetAllNewsArticlesQuery(homeFeedPage)`, it will trigger a fetch for `homeFeedPage`.
+  // If `homeFeedPage` is 5, it fetches page 5 and merges it.
+  // If the cache was preserved (which it is, in Redux), then we already have 1..4.
+  // So we just need to start from `homeFeedPage`.
+
+  const { data, isLoading, isFetching } =
+    useGetAllNewsArticlesQuery(homeFeedPage);
+
+  const { data: videoDAta, isLoading: isVideoLoading } =
+    useGetVideosArticlesQuery();
+
   const allNews = data?.items || [];
   const allVideosArtciles = videoDAta?.articles || [];
-  console.log("videoData", videoDAta);
 
   const total = data?.total || 0;
   const limit = data?.limit || 10;
@@ -49,7 +70,6 @@ const Home = () => {
 
   const transformedNews = allNews.map(transformNewsItem);
   const transformedVideoArticles = allVideosArtciles.map(transformNewsItem);
-  console.log("transformedVideoArticles", transformedVideoArticles);
 
   // Observe last news card
   const lastNewsElementRef = useCallback(
@@ -58,16 +78,16 @@ const Home = () => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          setPage((prev) => prev + 1);
+          dispatch(setHomeFeedPage(homeFeedPage + 1));
         }
       });
       if (node) observer.current.observe(node);
     },
-    [isFetching, hasMore]
+    [isFetching, hasMore, homeFeedPage, dispatch]
   );
 
-  const featuredNews = transformedNews[0];
-  const otherNews = transformedNews.slice(1);
+  const featuredNews = transformedNews.slice(0, 3);
+  const otherNews = transformedNews.slice(3);
   const videoNews = transformedVideoArticles;
   const [videoPage, setVideoPage] = useState(1);
   const videosPerPage = 4;
@@ -82,12 +102,12 @@ const Home = () => {
   const handleCloseModal = () => setPlayingVideoId(null);
 
   // Skeleton state
-  if (isLoading && isVideoLoading && page === 1) {
+  if ((isLoading || isVideoLoading) && homeFeedPage === 1) {
     return (
       <div className="lg:flex">
         <Sidebar />
         <main className="flex-1 min-h-[60vh]">
-          <div className="container mx-auto px-4">
+          <div className="w-full max-w-full px-4">
             <div className="bg-gray-50 min-h-screen py-4">
               <div className="mb-12">
                 <FeaturedNewsSkeleton />
@@ -118,7 +138,7 @@ const Home = () => {
       <div className="lg:flex">
         <Sidebar />
         <main className="flex-1 min-h-[60vh]">
-          <div className="container mx-auto px-4 bg-gray-50 min-h-screen py-4">
+          <div className="w-full max-w-full px-4 bg-gray-50 min-h-screen py-4">
             {/* Featured */}
             <div className="mb-12">
               <FeaturedNews news={featuredNews} />

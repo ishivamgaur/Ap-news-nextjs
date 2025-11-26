@@ -22,16 +22,19 @@ const Breadcrumb = () => {
   }
 
   return (
-    <div className="bg-gray-50">
-      <div className="flex justify-between items-center py-5 max-w-7xl mx-auto px-4">
-        <nav aria-label="Breadcrumb">
+    <div className="bg-gray-50 py-4">
+      <div className="max-w-7xl mx-auto px-4">
+        <nav
+          aria-label="Breadcrumb"
+          className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-white shadow-sm"
+        >
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li className="inline-flex items-center">
               <Link
                 href="/"
-                className="inline-flex items-center text-md font-medium text-red-500 hover:text-red-600 md:ms-2"
+                className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-red-700 transition-colors"
               >
-                <FaHome className="w-4 h-4 me-2.5" />
+                <FaHome className="w-4 h-4 me-2" />
                 {translations[language].home}
               </Link>
             </li>
@@ -60,13 +63,13 @@ const Breadcrumb = () => {
                   <div className="flex items-center">
                     <FaChevronRight className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" />
                     {isLast || isArticleSegment ? (
-                      <span className="ms-1 text-md font-medium text-gray-600 md:ms-2 dark:text-gray-700">
+                      <span className="ms-1 text-sm font-medium text-red-700 md:ms-2">
                         {displayName}
                       </span>
                     ) : (
                       <Link
                         href={routeTo}
-                        className="ms-1 text-md font-medium text-red-500 hover:text-red-600 md:ms-2"
+                        className="ms-1 text-sm font-medium text-gray-500 hover:text-red-700 md:ms-2 transition-colors"
                       >
                         {displayName}
                       </Link>

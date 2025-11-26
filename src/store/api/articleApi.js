@@ -38,14 +38,40 @@ export const articleApiSlice = createApi({
       transformResponse: (response) => response,
       serializeQueryArgs: ({ endpointName }) => endpointName,
       merge: (currentCache, newItems, { arg }) => {
-        if (arg === 1 || !currentCache?.items) return newItems;
-        currentCache.items.push(...newItems.items);
+        if (!currentCache?.items) {
+          return {
+            ...newItems,
+            maxLoadedPage: arg,
+          };
+        }
+
+        if (arg === 1) {
+          return {
+            ...newItems,
+            maxLoadedPage: 1,
+          };
+        }
+
+        const existingIds = new Set(currentCache.items.map((i) => i._id));
+        const newUniqueItems = newItems.items.filter(
+          (i) => !existingIds.has(i._id)
+        );
+
+        if (newUniqueItems.length > 0) {
+          currentCache.items.push(...newUniqueItems);
+        }
+
         currentCache.page = newItems.page;
         currentCache.total = newItems.total;
         currentCache.limit = newItems.limit;
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg
+        );
       },
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg;
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg > maxLoadedPage;
       },
       providesTags: ["Articles"],
     }),
@@ -59,11 +85,21 @@ export const articleApiSlice = createApi({
       transformResponse: (response) => response,
       serializeQueryArgs: ({ endpointName }) => endpointName,
       merge: (currentCache, newItems, { arg }) => {
-        if (arg === 1 || !currentCache?.articles) return newItems;
+        if (!currentCache?.articles) {
+          return { ...newItems, maxLoadedPage: arg };
+        }
+        if (arg === 1) {
+          return { ...newItems, maxLoadedPage: 1 };
+        }
         currentCache.articles.push(...newItems.articles);
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg
+        );
       },
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg;
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg > maxLoadedPage;
       },
       providesTags: ["Articles"],
     }),
@@ -77,11 +113,21 @@ export const articleApiSlice = createApi({
       transformResponse: (response) => response,
       serializeQueryArgs: ({ endpointName }) => endpointName,
       merge: (currentCache, newItems, { arg }) => {
-        if (arg === 1 || !currentCache?.articles) return newItems;
+        if (!currentCache?.articles) {
+          return { ...newItems, maxLoadedPage: arg };
+        }
+        if (arg === 1) {
+          return { ...newItems, maxLoadedPage: 1 };
+        }
         currentCache.articles.push(...newItems.articles);
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg
+        );
       },
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg;
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg > maxLoadedPage;
       },
       providesTags: ["Articles"],
     }),
@@ -95,11 +141,21 @@ export const articleApiSlice = createApi({
       transformResponse: (response) => response,
       serializeQueryArgs: ({ endpointName }) => endpointName,
       merge: (currentCache, newItems, { arg }) => {
-        if (arg === 1 || !currentCache?.articles) return newItems;
+        if (!currentCache?.articles) {
+          return { ...newItems, maxLoadedPage: arg };
+        }
+        if (arg === 1) {
+          return { ...newItems, maxLoadedPage: 1 };
+        }
         currentCache.articles.push(...newItems.articles);
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg
+        );
       },
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg;
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg > maxLoadedPage;
       },
       providesTags: ["Articles"],
     }),
@@ -113,11 +169,21 @@ export const articleApiSlice = createApi({
       transformResponse: (response) => response,
       serializeQueryArgs: ({ endpointName }) => endpointName,
       merge: (currentCache, newItems, { arg }) => {
-        if (arg === 1 || !currentCache?.articles) return newItems;
+        if (!currentCache?.articles) {
+          return { ...newItems, maxLoadedPage: arg };
+        }
+        if (arg === 1) {
+          return { ...newItems, maxLoadedPage: 1 };
+        }
         currentCache.articles.push(...newItems.articles);
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg
+        );
       },
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg;
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg > maxLoadedPage;
       },
       providesTags: ["Articles"],
     }),
@@ -131,11 +197,21 @@ export const articleApiSlice = createApi({
       transformResponse: (response) => response,
       serializeQueryArgs: ({ endpointName }) => endpointName,
       merge: (currentCache, newItems, { arg }) => {
-        if (arg === 1 || !currentCache?.articles) return newItems;
+        if (!currentCache?.articles) {
+          return { ...newItems, maxLoadedPage: arg };
+        }
+        if (arg === 1) {
+          return { ...newItems, maxLoadedPage: 1 };
+        }
         currentCache.articles.push(...newItems.articles);
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg
+        );
       },
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg;
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg > maxLoadedPage;
       },
       providesTags: ["Articles"],
     }),
@@ -150,7 +226,7 @@ export const articleApiSlice = createApi({
     getVideosArticles: builder.query({
       query: () => ({ url: `/articles/allvideos`, method: "get" }),
       providesTags: ["Articles"],
-    })
+    }),
   }),
 });
 
@@ -162,5 +238,5 @@ export const {
   useGetElectionsArticlesQuery,
   useGetSportsArticlesQuery,
   useGetArticleByIdQuery,
-  useGetVideosArticlesQuery
+  useGetVideosArticlesQuery,
 } = articleApiSlice;

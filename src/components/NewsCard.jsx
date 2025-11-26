@@ -26,8 +26,8 @@ const NewsCard = ({ news }) => {
   // bookmark feature removed
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      <div className="relative h-48 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group">
+      <div className="relative h-52 overflow-hidden">
         <Link
           href={
             news.category == "General"
@@ -36,20 +36,24 @@ const NewsCard = ({ news }) => {
           }
         >
           <img
-            src={news.image}
+            src={news.image || "/Ap-news.png"}
             alt={news.title[language]}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/Ap-news.png";
+            }}
           />
         </Link>
-        <span className="absolute top-2 left-2 bg-red-700 text-white px-3 py-1 text-xs font-semibold uppercase">
+        <span className="absolute top-3 left-3 bg-linear-to-r from-red-600 to-red-700 text-white px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full shadow-md">
           {news.category
             .split(" ")
             .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
             .join(" ")}
         </span>
       </div>
-      <div className="p-4">
-        <h3 className="font-bold text-lg mb-2 line-clamp-2 hover:text-red-700 transition-colors">
+      <div className="p-5 flex flex-col h-[calc(100%-13rem)]">
+        <h3 className="font-bold text-xl lg:text-lg xl:text-xl mb-3 line-clamp-2 text-gray-900 group-hover:text-red-700 transition-colors leading-tight">
           <Link
             href={
               news.category == "General"
@@ -60,27 +64,22 @@ const NewsCard = ({ news }) => {
             {news.title[language]}
           </Link>
         </h3>
-        <div className="flex flex-col space-y-1">
-          <p className="text-gray-600 text-sm font-semibold line-clamp-3">
+        <div className="grow">
+          <p className="text-gray-600 text-sm lg:text-xs xl:text-sm font-medium line-clamp-3 mb-2">
             {news.description[language]}
           </p>
-          <p className="text-gray-800 text-sm line-clamp-4">
-            {news.fullDescription[language]}
-          </p>
         </div>
-        <div className="mt-3 flex items-center justify-between">
-          <span className="text-xs text-gray-500 min-h-4">
+
+        <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+          <span className="text-xs lg:text-[10px] xl:text-xs text-gray-400 font-medium">
             {isClient &&
               new Date(news.date).toLocaleString("en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
               })}
           </span>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 lg:space-x-2 xl:space-x-3">
             <Link
               href={
                 news.category == "General"
@@ -88,7 +87,7 @@ const NewsCard = ({ news }) => {
                   : `/${news.category.toLowerCase()}/article/${news.id}`
               }
               onClick={recordView}
-              className="text-red-700 text-sm font-semibold hover:underline"
+              className="text-white bg-red-700 hover:bg-red-800 px-4 py-1.5 rounded-full text-xs lg:text-[10px] xl:text-xs font-bold transition-colors shadow-sm hover:shadow-md"
             >
               {language === "hi" ? "और पढ़ें" : "Read More"}
             </Link>

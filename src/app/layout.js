@@ -12,13 +12,17 @@ import Head from "next/head";
 import Script from "next/script";
 
 // 🖋️ Fonts
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import { Merriweather, Inter } from "next/font/google";
+
+// 🖋️ Fonts
+const merriweather = Merriweather({
+  variable: "--font-serif",
   subsets: ["latin"],
+  weight: ["300", "400", "700", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -41,7 +45,7 @@ export default function RootLayout({ children }) {
         ></Script>
       </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${merriweather.variable} ${inter.variable} antialiased flex flex-col min-h-screen font-sans bg-gray-50 text-gray-900`}
       >
         <StoreProvider>
           <LanguageProvider>

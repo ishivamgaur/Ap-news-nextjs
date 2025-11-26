@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import NewsCard from "@/components/NewsCard.jsx";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton.jsx";
 import { useGetAllNewsArticlesQuery } from "@/store/api/articleApi.js";
@@ -24,6 +24,16 @@ const AllNewsPage = () => {
 
   const articles = (data?.items || []).map(transformNewsItem);
   const hasMore = data ? articles.length < data.total : false;
+
+  // Sync local page state with cached data length to handle navigation from Home
+  useEffect(() => {
+    if (data?.items?.length) {
+      const calculatedPage = Math.ceil(data.items.length / 10); // Assuming limit is 10
+      if (calculatedPage > page) {
+        setPage(calculatedPage);
+      }
+    }
+  }, [data?.items?.length, page]);
 
   const lastNewsElementRef = useCallback(
     (node) => {
