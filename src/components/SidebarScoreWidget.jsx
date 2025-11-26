@@ -38,7 +38,7 @@ const SidebarScoreWidget = () => {
   // --- End of Countdown Logic ---
 
   return (
-    <aside className="hidden xl:flex flex-col sticky top-20 lg:w-64 xl:w-60 2xl:w-64 p-4 bg-white rounded-xl border border-gray-100 shadow-sm h-[calc(100vh-6rem)]">
+    <aside className="hidden xl:flex flex-col sticky top-20 lg:w-72 xl:w-72 2xl:w-72 p-4 bg-white rounded-xl border border-gray-100 shadow-sm h-[calc(100vh-6rem)]">
       {/* Election Countdown Section */}
       <div className="shrink-0 mb-6">
         <div className="p-5 border border-red-100 rounded-xl bg-red-50/50 shadow-sm relative overflow-hidden">
