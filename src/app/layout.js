@@ -10,6 +10,8 @@ import Footer from "@/components/Footer";
 import Breadcrumb from "@/components/Breadcrumb";
 import Head from "next/head";
 import Script from "next/script";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // 🖋️ Fonts
 import { Merriweather, Inter } from "next/font/google";
@@ -55,6 +57,11 @@ export default function RootLayout({ children }) {
             <div>{children}</div>
             <HighlightsBar />
             <Footer />
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              style={{ zIndex: 999999 }}
+            />
           </LanguageProvider>
         </StoreProvider>
       </body>

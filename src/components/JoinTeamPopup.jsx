@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { BiPhone } from "react-icons/bi";
 import {
   FaTimes,
   FaUpload,
@@ -8,10 +7,20 @@ import {
   FaEnvelope,
   FaMapMarkerAlt,
   FaFilePdf,
-  FaPlay,
-  FaPhone,
   FaPhoneAlt,
+  FaBriefcase,
+  FaGraduationCap,
+  FaClock,
+  FaPercent,
+  FaLanguage,
+  FaHashtag,
+  FaLink,
+  FaPen,
+  FaBuilding,
+  FaRupeeSign,
+  FaCalendarAlt,
 } from "react-icons/fa";
+import { toast } from "react-toastify";
 import apiClient from "../api";
 
 const JoinTeamPopup = ({ isOpen, onClose, language }) => {
@@ -21,6 +30,18 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
     phone: "",
     state: "Bihar",
     district: "",
+    profession: "",
+    experience: "",
+    education: "",
+    educationPercentage: "",
+    languages: "",
+    specialization: "",
+    currentOrganization: "",
+    expectedSalary: "",
+    noticePeriod: "",
+    socialMediaLink: "",
+    portfolioLink: "",
+    bio: "",
     resume: null,
     demoVideo: null,
   });
@@ -94,24 +115,43 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
     setSubmissionMessage("");
 
     try {
+      // Client-side validation for required fields
+      if (
+        !formData.name ||
+        !formData.email ||
+        !formData.phone ||
+        !formData.district ||
+        !formData.profession ||
+        !formData.experience ||
+        !formData.education ||
+        !formData.languages ||
+        !formData.resume
+      ) {
+        const errorMsg =
+          language === "hi"
+            ? "कृपया सभी आवश्यक फ़ील्ड भरें।"
+            : "Please fill in all required fields.";
+        toast.error(errorMsg);
+        setIsSubmitting(false);
+        return;
+      }
+
       // Create FormData object to send files
       const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("phone", formData.phone);
-      formDataToSend.append("district", formData.district);
-
-      if (formData.resume) formDataToSend.append("resume", formData.resume);
-      if (formData.demoVideo)
-        formDataToSend.append("demoVideo", formData.demoVideo);
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== null) {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
 
       const response = await apiClient.post("/join-team", formDataToSend);
 
       console.log("Form submitted successfully:", response.data);
       setSubmissionStatus("success");
-      setSubmissionMessage(
-        response.data.message || "Application submitted successfully!"
-      );
+      const successMsg =
+        response.data.message || "Application submitted successfully!";
+      setSubmissionMessage(successMsg);
+      toast.success(successMsg);
 
       // Close popup after a short delay to show success message
       setTimeout(() => {
@@ -123,6 +163,17 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
           phone: "",
           state: "Bihar",
           district: "",
+          profession: "",
+          experience: "",
+          education: "",
+          educationPercentage: "",
+          languages: "",
+          currentOrganization: "",
+          expectedSalary: "",
+          noticePeriod: "",
+          socialMediaLink: "",
+          portfolioLink: "",
+          bio: "",
           resume: null,
           demoVideo: null,
         });
@@ -136,18 +187,27 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
 
       // Check for MongoDB duplicate key error for the email
       const mongoError = err.response?.data?.error;
-      if (
-        typeof mongoError === "string" &&
-        mongoError.includes("E11000") &&
-        mongoError.includes("email")
-      ) {
-        errorMessage =
-          language === "hi"
-            ? "यह ईमेल पहले से पंजीकृत है। कृपया एक अलग ईमेल का उपयोग करें।"
-            : "This email is already registered. Please use a different one.";
+      if (typeof mongoError === "string" && mongoError.includes("E11000")) {
+        if (mongoError.includes("email")) {
+          errorMessage =
+            language === "hi"
+              ? "यह ईमेल पहले से पंजीकृत है। कृपया एक अलग ईमेल का उपयोग करें।"
+              : "This email is already registered. Please use a different one.";
+        } else if (mongoError.includes("phone")) {
+          errorMessage =
+            language === "hi"
+              ? "यह फोन नंबर पहले से पंजीकृत है। कृपया एक अलग नंबर का उपयोग करें।"
+              : "This phone number is already registered. Please use a different one.";
+        } else {
+          errorMessage =
+            language === "hi"
+              ? "यह विवरण पहले से मौजूद है।"
+              : "This entry already exists.";
+        }
       }
       setSubmissionStatus("error");
       setSubmissionMessage(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -191,9 +251,9 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
       className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[60] p-4 animate-fadeIn"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-slideUp border border-gray-100">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col animate-slideUp border border-gray-100">
         {/* Header */}
-        <div className="relative bg-linear-to-r from-red-800 to-red-900 p-8 text-white shrink-0">
+        <div className="relative bg-linear-to-r from-red-800 to-red-900 p-6 md:p-8 text-white shrink-0">
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-2xl lg:text-3xl font-serif font-bold tracking-tight">
@@ -241,7 +301,8 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                   {/* Name Field */}
                   <div className="group">
                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
-                      {language === "hi" ? "पूरा नाम" : "Full Name"}
+                      {language === "hi" ? "पूरा नाम" : "Full Name"}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <input
@@ -262,7 +323,7 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                   {/* Email Field */}
                   <div className="group">
                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
-                      Email
+                      Email <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <input
@@ -281,7 +342,8 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                   {/* Phone Field */}
                   <div className="group">
                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
-                      {language === "hi" ? "फोन नंबर" : "Phone Number"}
+                      {language === "hi" ? "फोन नंबर" : "Phone Number"}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <input
@@ -300,7 +362,8 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                   {/* District Field */}
                   <div className="group">
                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
-                      {language === "hi" ? "जिला" : "District"}
+                      {language === "hi" ? "जिला" : "District"}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <select
@@ -325,10 +388,247 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Profession Field */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi" ? "पेशा" : "Profession"}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="profession"
+                        value={formData.profession}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder={
+                          language === "hi"
+                            ? "पत्रकार / छात्र"
+                            : "Journalist / Student"
+                        }
+                      />
+                      <FaBriefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Experience Field */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi"
+                        ? "अनुभव (वर्ष)"
+                        : "Experience (Years)"}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="experience"
+                        value={formData.experience}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder={language === "hi" ? "2 वर्ष" : "2 Years"}
+                      />
+                      <FaClock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Education Field */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi" ? "शिक्षा" : "Education"}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="education"
+                        value={formData.education}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder={language === "hi" ? "स्नातक" : "Graduate"}
+                      />
+                      <FaGraduationCap className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Education Percentage Field */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi"
+                        ? "प्रतिशत / CGPA"
+                        : "Percentage / CGPA"}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="educationPercentage"
+                        value={formData.educationPercentage}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder={language === "hi" ? "85%" : "85%"}
+                      />
+                      <FaPercent className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Languages Field */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi" ? "भाषाएं" : "Languages Known"}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="languages"
+                        value={formData.languages}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder={
+                          language === "hi"
+                            ? "हिंदी, अंग्रेजी, मैथिली"
+                            : "Hindi, English, Maithili"
+                        }
+                      />
+                      <FaLanguage className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Current Organization */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi"
+                        ? "वर्तमान संगठन"
+                        : "Current Organization"}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="currentOrganization"
+                        value={formData.currentOrganization}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder={
+                          language === "hi" ? "एबीसी न्यूज" : "ABC News"
+                        }
+                      />
+                      <FaBuilding className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Expected Salary */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi" ? "अपेक्षित वेतन" : "Expected Salary"}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="expectedSalary"
+                        value={formData.expectedSalary}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder={
+                          language === "hi"
+                            ? "₹ 25,000 / माह"
+                            : "₹ 25,000 / Month"
+                        }
+                      />
+                      <FaRupeeSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Notice Period */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi" ? "नोटिस अवधि" : "Notice Period"}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="noticePeriod"
+                        value={formData.noticePeriod}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder={language === "hi" ? "15 दिन" : "15 Days"}
+                      />
+                      <FaCalendarAlt className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Social Media Link */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi"
+                        ? "सोशल मीडिया लिंक"
+                        : "Social Media Link"}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="url"
+                        name="socialMediaLink"
+                        value={formData.socialMediaLink}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder="https://linkedin.com/in/..."
+                      />
+                      <FaLink className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Portfolio Link */}
+                  <div className="group">
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                      {language === "hi"
+                        ? "पोर्टफोलियो लिंक"
+                        : "Portfolio Link"}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="url"
+                        name="portfolioLink"
+                        value={formData.portfolioLink}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        placeholder="https://youtube.com/..."
+                      />
+                      <FaLink className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bio / Why Join */}
+                <div className="group mt-6">
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    {language === "hi"
+                      ? "आप AP News क्यों चुनना चाहते हैं?"
+                      : "Why do you want to join AP News?"}
+                  </label>
+                  <div className="relative">
+                    <textarea
+                      name="bio"
+                      value={formData.bio}
+                      onChange={handleInputChange}
+                      rows="3"
+                      className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400 resize-none"
+                      placeholder={
+                        language === "hi"
+                          ? "अपने बारे में संक्षेप में बताएं..."
+                          : "Briefly tell us about yourself..."
+                      }
+                    ></textarea>
+                    <FaPen className="absolute left-4 top-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                  </div>
                 </div>
 
                 {/* Upload Section */}
-                <div className="space-y-4 pt-4 border-t border-gray-100">
+                <div className="space-y-4 pt-4 border-t border-gray-100 mt-6">
                   <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
                     <span className="w-1 h-4 bg-red-600 rounded-full"></span>
                     {language === "hi" ? "दस्तावेज़ अपलोड" : "Upload Documents"}
@@ -370,7 +670,8 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                             <span>
                               {language === "hi"
                                 ? "रिज्यूमे अपलोड करें"
-                                : "Upload Resume"}
+                                : "Upload Resume"}{" "}
+                              <span className="text-red-500">*</span>
                             </span>
                           )}
                         </div>
