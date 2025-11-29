@@ -19,36 +19,20 @@ import FeaturedNewsSkeleton from "../components/FeaturedNewsSkeleton";
 import VideoCardSkeleton from "../components/VideoCardSkeleton";
 import NewsCardSkeleton from "../components/NewsCardSkeleton";
 import { useLanguage } from "../context/LanguageContext";
+import Link from "next/link";
 
 const Home = () => {
   const { language } = useLanguage();
   const dispatch = useDispatch();
   const homeFeedPage = useSelector((state) => state.ui.homeFeedPage);
-  const [playingVideoId, setPlayingVideoId] = useState(null);
+  const [playingVideo, setPlayingVideo] = useState(null);
   const observer = useRef();
-
-  // We use a local state to track if we are initializing to avoid double fetch if needed,
-  // but RTK Query handles caching.
-  // The query hook needs the *current* page to fetch.
-  // If we want to load *up to* page N, we might need a different approach or just rely on the fact
-  // that we want to fetch page N when we scroll.
-  // Actually, standard infinite scroll with RTK Query usually involves fetching page 1, then 2, etc.
-  // If we come back and `homeFeedPage` is 5, we might miss pages 1-4 if we just fetch 5.
-  // BUT, `getAllNewsArticles` cache is keyed by the endpoint name (shared cache).
-  // So if the cache exists in the store, `useGetAllNewsArticlesQuery(page)` might just return the cached data
-  // for that specific page arg?
-  // Wait, `serializeQueryArgs: ({ endpointName }) => endpointName` means all pages share the SAME cache entry.
-  // So `useGetAllNewsArticlesQuery(1)` and `useGetAllNewsArticlesQuery(5)` write to the SAME cache.
-  // So if we just call `useGetAllNewsArticlesQuery(homeFeedPage)`, it will trigger a fetch for `homeFeedPage`.
-  // If `homeFeedPage` is 5, it fetches page 5 and merges it.
-  // If the cache was preserved (which it is, in Redux), then we already have 1..4.
-  // So we just need to start from `homeFeedPage`.
 
   const { data, isLoading, isFetching } =
     useGetAllNewsArticlesQuery(homeFeedPage);
 
   const { data: videoDAta, isLoading: isVideoLoading } =
-    useGetVideosArticlesQuery();
+    useGetVideosArticlesQuery(1);
 
   const allNews = data?.items || [];
   const allVideosArtciles = videoDAta?.articles || [];
@@ -65,7 +49,11 @@ const Home = () => {
     image: item.featuredImage?.url,
     category: item.category,
     date: item.publishAt,
-    youtubeVideoId: item.youtubeVideoId,
+    youtubeVideoId: item.youtubeVideoId?.includes("v=")
+      ? item.youtubeVideoId.split("v=")[1]?.split("&")[0]
+      : item.youtubeVideoId?.includes("youtu.be/")
+      ? item.youtubeVideoId.split("youtu.be/")[1]?.split("?")[0]
+      : item.youtubeVideoId,
   });
 
   const transformedNews = allNews.map(transformNewsItem);
@@ -88,18 +76,11 @@ const Home = () => {
 
   const featuredNews = transformedNews.slice(0, 3);
   const otherNews = transformedNews.slice(3);
-  const videoNews = transformedVideoArticles;
-  const [videoPage, setVideoPage] = useState(1);
-  const videosPerPage = 4;
+  const videoNews = transformedVideoArticles.slice(0, 3); // Show only 3 videos on home
 
-  const totalVideoPages = Math.ceil(videoNews.length / videosPerPage);
-  const currentVideos = useMemo(() => {
-    const start = (videoPage - 1) * videosPerPage;
-    return videoNews.slice(start, start + videosPerPage);
-  }, [videoPage, videoNews]);
-
-  const handlePlayVideo = (id) => setPlayingVideoId(id);
-  const handleCloseModal = () => setPlayingVideoId(null);
+  const handlePlayVideo = (videoId, articleId, category) =>
+    setPlayingVideo({ videoId, articleId, category });
+  const handleCloseModal = () => setPlayingVideo(null);
 
   // Skeleton state
   if ((isLoading || isVideoLoading) && homeFeedPage === 1) {
@@ -135,67 +116,112 @@ const Home = () => {
 
   return (
     <>
-      <div className="lg:flex">
-        <Sidebar />
-        <main className="flex-1 min-h-[60vh]">
-          <div className="w-full max-w-full px-4 bg-gray-50 min-h-screen py-4">
-            {/* Featured */}
-            <div className="mb-12">
-              <FeaturedNews news={featuredNews} />
+      <div className="min-h-screen bg-white">
+        <div className="max-w-[1920px] mx-auto xl:px-0 lg:px-4 p-2 py-6">
+          <div className="lg:flex flex-nowrap gap-4">
+            {/* Left Sidebar - Hidden on LG, visible on XL */}
+            <div className="hidden xl:block w-64 shrink-0">
+              <Sidebar />
             </div>
 
-            {/* Videos */}
-            <div className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 mb-6">
-                {language === "hi" ? "वीडियो समाचार" : "Video News"}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
-                {currentVideos.map((v) => (
-                  <VideoCard key={v.id} video={v} onPlay={handlePlayVideo} />
-                ))}
+            {/* Main Content */}
+            <main className="flex-1 min-w-0">
+              {/* Featured */}
+              <div className="mb-12">
+                <FeaturedNews news={featuredNews} onPlay={handlePlayVideo} />
               </div>
-              <Pagination
-                currentPage={videoPage}
-                totalPages={totalVideoPages}
-                onPageChange={setVideoPage}
-              />
-            </div>
 
-            {/* Latest News */}
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-red-700 pl-4 mb-6">
-                {language === "hi" ? "ताज़ा खबरें" : "Latest News"}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {otherNews.map((news, i) => (
-                  <div
-                    key={news.id}
-                    ref={i === otherNews.length - 1 ? lastNewsElementRef : null}
+              {/* Videos */}
+              <div className="mb-12">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900 border-l-4 border-red-700 pl-4">
+                    {language === "hi" ? "वीडियो समाचार" : "Video News"}
+                  </h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                  {videoNews.map((v) => (
+                    <VideoCard
+                      key={v.id}
+                      video={v}
+                      onPlay={(videoId) =>
+                        handlePlayVideo(videoId, v.id, v.category)
+                      }
+                    />
+                  ))}
+                </div>
+                <div className="mt-6 text-center">
+                  <Link
+                    href="/videos"
+                    className="inline-flex items-center gap-2 text-red-700 font-bold hover:text-red-800 transition-colors"
                   >
-                    <NewsCard news={news} />
-                  </div>
-                ))}
+                    View More Videos
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.72 7.72a.75.75 0 011.06 0l3.75 3.75a.75.75 0 010 1.06l-3.75 3.75a.75.75 0 11-1.06-1.06l2.47-2.47H3a.75.75 0 010-1.5h16.19l-2.47-2.47a.75.75 0 010-1.06z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
 
-                {isFetching && (
-                  <>
-                    {[...Array(5)].map((_, i) => (
-                      <NewsCardSkeleton key={i} />
-                    ))}
-                  </>
+              {/* Latest News */}
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900 border-l-4 border-red-700 pl-4">
+                    {language === "hi" ? "ताज़ा खबरें" : "Latest News"}
+                  </h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                  {otherNews.map((news, i) => (
+                    <div
+                      key={news.id}
+                      ref={
+                        i === otherNews.length - 1 ? lastNewsElementRef : null
+                      }
+                    >
+                      <NewsCard news={news} onPlay={handlePlayVideo} />
+                    </div>
+                  ))}
+
+                  {isFetching && (
+                    <>
+                      {[...Array(4)].map((_, i) => (
+                        <NewsCardSkeleton key={i} />
+                      ))}
+                    </>
+                  )}
+                </div>
+
+                {!hasMore && transformedNews.length > 1 && (
+                  <div className="text-center py-8 text-gray-500 font-medium">
+                    No more news to load.
+                  </div>
                 )}
               </div>
+            </main>
 
-              {!hasMore && transformedNews.length > 1 && (
-                <div className="text-center py-4">No more news to load.</div>
-              )}
+            {/* Right Sidebar - Hidden on smaller LG, visible on larger LG/XL */}
+            <div className="hidden lg:block w-64 shrink-0">
+              <RightSidebarNews />
             </div>
           </div>
-        </main>
-        <RightSidebarNews />
+        </div>
       </div>
 
       <FloatingVideoPlayer />
-      <VideoModal videoId={playingVideoId} onClose={handleCloseModal} />
+      <VideoModal
+        videoId={playingVideo?.videoId}
+        articleId={playingVideo?.articleId}
+        category={playingVideo?.category}
+        onClose={handleCloseModal}
+      />
     </>
   );
 };

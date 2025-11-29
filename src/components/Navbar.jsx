@@ -58,7 +58,7 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   href={link.path}
-                  className={`relative font-bold text-sm tracking-wide transition-all duration-300 py-2 ${
+                  className={`relative font-bold text-xs lg:text-sm tracking-wide transition-all duration-300 py-2 ${
                     pathname === link.path
                       ? "text-red-700 after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-full after:bg-red-700 after:rounded-full"
                       : "text-gray-600 hover:text-red-700 after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-red-700 after:transition-all after:duration-300 hover:after:w-full after:rounded-full"

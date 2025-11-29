@@ -1,6 +1,7 @@
-import { FaTimes } from "react-icons/fa";
+import Link from "next/link";
+import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
-const VideoModal = ({ videoId, onClose }) => {
+const VideoModal = ({ videoId, articleId, category, onClose }) => {
   if (!videoId) return null;
 
   return (
@@ -28,6 +29,21 @@ const VideoModal = ({ videoId, onClose }) => {
             className="w-full h-full"
           ></iframe>
         </div>
+
+        {articleId && (
+          <div className="mt-4 flex justify-center">
+            <Link
+              href={
+                category === "General"
+                  ? `/news/article/${articleId}`
+                  : `/${category?.toLowerCase()}/article/${articleId}`
+              }
+              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-bold transition-colors"
+            >
+              View Article <FaExternalLinkAlt className="text-sm" />
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

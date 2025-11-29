@@ -88,7 +88,7 @@ const TopBar = () => {
 
   return (
     <div className="bg-red-800 text-white">
-      <div className="max-w-7xl mx-auto px-5 h-10 flex items-center justify-between text-sm">
+      <div className="max-w-7xl mx-auto px-2 h-10 flex items-center justify-between text-xs lg:text-sm">
         {/* Left Side: Weather */}
         <div className="flex items-center gap-2">
           <TiWeatherPartlySunny size={24} className="text-yellow-400" />

@@ -222,9 +222,37 @@ export const articleApiSlice = createApi({
       providesTags: ["Articles"],
     }),
 
-    //! GET VIDEOS ARTICLES
+    //! GET VIDEOS ARTICLES (Infinite Scroll)
     getVideosArticles: builder.query({
-      query: () => ({ url: `/articles/allvideos`, method: "get" }),
+      query: (page = 1) => ({
+        url: `/articles/allvideos?page=${page}`,
+        method: "get",
+      }),
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems, { arg }) => {
+        if (!currentCache?.articles) {
+          return { ...newItems, maxLoadedPage: arg };
+        }
+        if (arg === 1) {
+          return { ...newItems, maxLoadedPage: 1 };
+        }
+
+        // Filter out duplicates based on _id
+        const existingIds = new Set(currentCache.articles.map((a) => a._id));
+        const newUniqueArticles = newItems.articles.filter(
+          (a) => !existingIds.has(a._id)
+        );
+
+        currentCache.articles.push(...newUniqueArticles);
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg
+        );
+      },
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg > maxLoadedPage;
+      },
       providesTags: ["Articles"],
     }),
 

@@ -9,6 +9,8 @@ import Image from "next/image";
 import ArticleDetailSkeleton from "@/components/ArticleDetailSkeleton";
 import Link from "next/link";
 import { FaCalendarAlt, FaUser } from "react-icons/fa";
+import VideoModal from "@/components/VideoModal";
+import { useState } from "react";
 
 const ArticleDetailPage = () => {
   const { id } = useParams();
@@ -17,6 +19,7 @@ const ArticleDetailPage = () => {
   console.log("Article Data:", rawArticle);
 
   const article = rawArticle?.article || rawArticle?.data || rawArticle;
+  const [playingVideoId, setPlayingVideoId] = useState(null);
 
   if (isLoading) {
     return <ArticleDetailSkeleton />;
@@ -58,13 +61,13 @@ const ArticleDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900 pt-8 pb-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Article Header */}
         <header className="mb-8">
           <span className="inline-block bg-red-50 text-red-700 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full mb-4 border border-red-100">
             {category}
           </span>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6 font-serif">
+          <h1 className="text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 leading-tight mb-6 font-serif">
             {title}
           </h1>
 
@@ -86,7 +89,7 @@ const ArticleDetailPage = () => {
         </header>
 
         {/* Featured Image */}
-        <div className="relative w-full aspect-video mb-10 rounded-2xl overflow-hidden shadow-sm bg-gray-100">
+        <div className="relative w-full aspect-video mb-10 rounded-2xl overflow-hidden shadow-sm bg-gray-100 group">
           <Image
             src={article.featuredImage?.url || "/Ap-news.png"}
             alt={title}
@@ -94,6 +97,30 @@ const ArticleDetailPage = () => {
             className="object-cover"
             priority
           />
+          {article.youtubeVideoId && (
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+              <button
+                onClick={() => setPlayingVideoId(article.youtubeVideoId)}
+                className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-bold flex items-center gap-3 shadow-lg transform transition-all hover:scale-105 backdrop-blur-sm"
+              >
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-4 h-4 text-red-600 ml-0.5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                {language === "hi" ? "वीडियो देखें" : "Watch Video"}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Summary / Description */}
@@ -116,6 +143,10 @@ const ArticleDetailPage = () => {
           <ShareButtons title={title} url={`/${category}/article/${id}`} />
         </div>
       </div>
+      <VideoModal
+        videoId={playingVideoId}
+        onClose={() => setPlayingVideoId(null)}
+      />
     </div>
   );
 };

@@ -35,11 +35,9 @@ const SidebarScoreWidget = () => {
 
     return () => clearTimeout(timer);
   });
-  // --- End of Countdown Logic ---
 
   return (
-    <aside className="hidden xl:flex flex-col sticky top-20 lg:w-72 xl:w-72 2xl:w-72 p-4 bg-white rounded-xl border border-gray-100 shadow-sm h-[calc(100vh-6rem)]">
-      {/* Election Countdown Section */}
+    <aside className="hidden xl:flex flex-col sticky top-20 lg:w-52 xl:w-64 p-2 bg-white rounded-xl border border-gray-100 shadow-sm h-[calc(100vh-6rem)]">
       <div className="shrink-0 mb-6">
         <div className="p-5 border border-red-100 rounded-xl bg-red-50/50 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-red-100 rounded-full blur-xl opacity-50"></div>
@@ -89,7 +87,7 @@ const SidebarScoreWidget = () => {
       </div>
 
       {/* Scrollable Content */}
-      <div className="grow overflow-y-auto pr-2 space-y-6 scrollbar-hide">
+      <div className="grow overflow-y-auto pr-2 space-y-6">
         {/* Live Cricket Scores */}
         <div>
           <div className="flex items-center gap-2 mb-3">

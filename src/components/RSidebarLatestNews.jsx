@@ -182,10 +182,7 @@ const RightSidebarNews = () => {
   console.log("Right side bar news", news);
 
   return (
-    <aside
-      className="hidden lg:flex flex-col sticky top-20 lg:w-64 xl:w-52 2xl:w-64 border-l p-2 py-4 border-gray-300 shadow-lg"
-      style={{ height: "calc(100vh - 4rem)" }} // 100vh - top-16 (4rem)
-    >
+    <aside className="hidden lg:flex flex-col sticky top-20 lg:w-64 w-full p-2 bg-white rounded-xl border border-gray-100 shadow-sm h-[calc(100vh-6rem)]">
       {/* Non-scrollable Video Section */}
       <div className="shrink-0">
         <div className="flex flex-col gap-4">
