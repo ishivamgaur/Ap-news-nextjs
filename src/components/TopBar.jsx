@@ -8,6 +8,7 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 import { TiWeatherPartlySunny } from "react-icons/ti";
+import { Geolocation } from "@capacitor/geolocation";
 
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY;
 const DEFAULT_CITY = process.env.NEXT_PUBLIC_DEFAULT_CITY;
@@ -70,20 +71,34 @@ const TopBar = () => {
       setWeather({ city: data.name, temp: Math.round(data.main.temp) });
     };
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          fetchWeather(position.coords.latitude, position.coords.longitude);
-        },
-        () => {
-          setError("Geolocation failed. Showing weather for the default city.");
-          fetchDefaultWeather(); // Fallback to default city
+    const getLocation = async () => {
+      try {
+        // Try to request permissions (will throw on web, which is fine)
+        try {
+          const check = await Geolocation.checkPermissions();
+          if (check.location !== "granted") {
+            const request = await Geolocation.requestPermissions();
+            if (request.location !== "granted") {
+              throw new Error("Location permission denied");
+            }
+          }
+        } catch (permError) {
+          // Ignore "Not implemented on web" error
+          if (permError.message !== "Not implemented on web.") {
+            console.warn("Permission request failed:", permError);
+          }
         }
-      );
-    } else {
-      setError("Geolocation is not supported by this browser.");
-      fetchDefaultWeather(); // Fallback to default city
-    }
+
+        const position = await Geolocation.getCurrentPosition();
+        fetchWeather(position.coords.latitude, position.coords.longitude);
+      } catch (e) {
+        console.error("Geolocation error:", e);
+        setError("Location access denied. Showing default city.");
+        fetchDefaultWeather();
+      }
+    };
+
+    getLocation();
   }, []);
 
   return (
