@@ -2,11 +2,11 @@
 import { useSearchParams } from "next/navigation";
 import { useSearchArticlesQuery } from "../../store/api/searchApi";
 import { FaSpinner } from "react-icons/fa";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import NewsCard from "../../components/NewsCard";
 import NewsCardSkeleton from "../../components/NewsCardSkeleton";
 
-const SearchPage = () => {
+const SearchContent = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [page, setPage] = useState(1);
@@ -142,6 +142,20 @@ const SearchPage = () => {
         )}
       </div>
     </div>
+  );
+};
+
+const SearchPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <FaSpinner className="animate-spin text-4xl text-red-600" />
+        </div>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   );
 };
 

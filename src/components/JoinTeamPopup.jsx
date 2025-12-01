@@ -248,7 +248,7 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[60] p-4 animate-fadeIn"
+      className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-60 p-4 animate-fadeIn"
       onClick={handleBackdropClick}
     >
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col animate-slideUp border border-gray-100">
@@ -272,7 +272,7 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
               <FaTimes size={20} />
             </button>
           </div>
-          <div className="absolute -bottom-8 right-8 w-16 h-16 bg-white rounded-2xl rotate-3 flex items-center justify-center shadow-lg border-4 border-white/50 hidden md:flex z-1000">
+          <div className="absolute -bottom-8 right-8 w-16 h-16 bg-white rounded-2xl rotate-3  items-center justify-center shadow-lg border-4 border-white/50 hidden md:flex z-1000">
             <FaUser className="text-red-700 text-2xl" />
           </div>
         </div>

@@ -26,7 +26,7 @@ const axiosBaseQuery =
 
 export const articleApiSlice = createApi({
   reducerPath: "articleApi",
-  baseQuery: axiosBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+  baseQuery: axiosBaseQuery({ baseUrl: "https://ap-news-b.onrender.com/api" }),
   tagTypes: ["Articles"],
   endpoints: (builder) => ({
     //! GET ALL ARTICLES

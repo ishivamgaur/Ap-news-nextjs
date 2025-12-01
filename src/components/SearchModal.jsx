@@ -81,7 +81,7 @@ const SearchModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4">
+    <div className="fixed inset-0 z-100 flex items-start justify-center pt-20 px-4">
       {/* Dimmed Background */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
