@@ -103,10 +103,10 @@ const TopBar = () => {
 
   return (
     <div className="bg-red-800 text-white">
-      <div className="max-w-7xl mx-auto px-2 h-10 flex items-center justify-between text-xs lg:text-sm">
+      <div className="max-w-7xl mx-auto px-2 md:px-4 xl:px-4 h-10 md:h-8 lg:h-8 xl:h-8 2xl:h-10 flex items-center justify-between text-xs lg:text-[10px] xl:text-xs 2xl:text-sm">
         {/* Left Side: Weather */}
         <div className="flex items-center gap-2">
-          <TiWeatherPartlySunny size={24} className="text-yellow-400" />
+          <TiWeatherPartlySunny size={20} className="text-yellow-400 lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6" />
           {weather ? (
             <>
               <span className="font-semibold">{weather.city}</span>
@@ -118,7 +118,7 @@ const TopBar = () => {
         </div>
 
         {/* Right Side: Social Links */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 ">
           {socialLinks.map(({ href, Icon, hoverClass, label }) => (
             <a
               key={label}
@@ -128,7 +128,10 @@ const TopBar = () => {
               aria-label={label}
               className={`text-gray-200 ${hoverClass} transform hover:scale-125 transition-all duration-200`}
             >
-              <Icon size={18} />
+              <Icon
+                size={14}
+                className="lg:w-3 lg:h-3 xl:w-3.5 xl:h-3.5 2xl:w-4 2xl:h-4"
+              />
             </a>
           ))}
         </div>

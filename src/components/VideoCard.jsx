@@ -8,10 +8,10 @@ const VideoCard = ({ video, onPlay }) => {
 
   return (
     <div
-      className="relative group cursor-pointer rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full"
+      className="relative group cursor-pointer rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full"
       onClick={() => onPlay(youtubeVideoId)}
     >
-      <div className="relative h-48 sm:h-52">
+      <div className="relative aspect-video">
         <img
           src={thumbnailUrl}
           alt={title[language]}
@@ -21,7 +21,7 @@ const VideoCard = ({ video, onPlay }) => {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
             <FaPlay className="text-white text-sm ml-1" />
           </div>
-          <h3 className="text-white font-bold text-sm md:text-[14px] lg:text-xs xl:text-sm leading-tight line-clamp-2 drop-shadow-md font-serif">
+          <h3 className="text-white font-bold text-sm md:text-[14px] lg:text-xs xl:text-xs leading-tight line-clamp-2 drop-shadow-md font-serif">
             {title[language]}
           </h3>
         </div>

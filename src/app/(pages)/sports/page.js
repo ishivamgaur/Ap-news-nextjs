@@ -32,7 +32,7 @@ const SportsPage = () => {
         if (entries[0].isIntersecting && hasMore) {
           setPage((prev) => prev + 1);
         }
-      });
+      }, { rootMargin: "500px" });
       if (node) observer.current.observe(node);
     },
     [isFetching, hasMore]
@@ -47,7 +47,7 @@ const SportsPage = () => {
               <div className="h-10 bg-gray-300 rounded w-48 border-l-4 border-gray-300 pl-4"></div>
               <div className="h-4 bg-gray-300 rounded w-72 mt-4 ml-4"></div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {[...Array(9)].map((_, index) => (
                 <NewsCardSkeleton key={index} />
               ))}
@@ -64,7 +64,7 @@ const SportsPage = () => {
                   Scores, matches, and sports news
                 </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {articles.map((news, i) => (
                   <div
                     key={news.id}

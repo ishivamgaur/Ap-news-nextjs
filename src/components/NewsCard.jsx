@@ -24,7 +24,7 @@ const NewsCard = ({ news, onPlay }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col h-full">
+    <div className="overflow-hidden hover:shadow-sm transition-all duration-300 hover:-translate-y-1 group flex flex-col h-full">
       <div className="relative h-48 sm:h-52 overflow-hidden shrink-0">
         <Link
           href={
@@ -74,8 +74,8 @@ const NewsCard = ({ news, onPlay }) => {
             .join(" ")}
         </span>
       </div>
-      <div className="p-5 flex flex-col grow">
-        <h3 className="font-bold text-sm md:text-[14px] lg:text-xs xl:text-base mb-2 line-clamp-2 text-gray-900 group-hover:text-red-700 transition-colors leading-tight font-serif">
+      <div className="p-3 flex flex-col grow">
+        <h3 className="font-bold text-sm md:text-[14px] lg:text-xs xl:text-sm mb-2 line-clamp-2 text-gray-900 group-hover:text-red-700 transition-colors leading-tight font-serif">
           <Link
             href={
               news.category == "General"
@@ -87,7 +87,7 @@ const NewsCard = ({ news, onPlay }) => {
           </Link>
         </h3>
         <div className="grow">
-          <p className="text-gray-500 text-xs md:text-xs lg:text-sm xl:text-base font-medium line-clamp-3 mb-4 leading-relaxed">
+          <p className="text-gray-500 text-xs md:text-xs lg:text-xs xl:text-xs font-medium line-clamp-3 mb-4 leading-relaxed">
             {news.description[language]}
           </p>
         </div>
@@ -113,14 +113,14 @@ const NewsCard = ({ news, onPlay }) => {
             >
               {language === "hi" ? "और पढ़ें" : "Read More"}
             </Link>
-            <ShareButtons
+            {/* <ShareButtons
               title={news.title[language]}
               url={
                 news.category == "General"
                   ? `/news/article/${news.id}`
                   : `/${news.category.toLowerCase()}/article/${news.id}`
               }
-            />
+            /> */}
           </div>
         </div>
       </div>

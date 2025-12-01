@@ -22,20 +22,20 @@ const Breadcrumb = () => {
   }
 
   return (
-    <div className="bg-gray-50 py-4">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-gray-50 py-3 lg:py-4">
+      <div className="max-w-6xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 xl:px-4">
         <nav
           aria-label="Breadcrumb"
-          className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-white shadow-sm overflow-x-auto whitespace-nowrap scrollbar-hide"
+          className="flex justify-start items-start"
         >
-          <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-            <li className="inline-flex items-center">
+          <ol className="flex items-center flex-wrap justify-start gap-2 bg-white px-6 py-2 rounded-full shadow-sm border border-gray-100">
+            <li>
               <Link
                 href="/"
-                className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-red-700 transition-colors"
+                className="flex items-center text-gray-400 hover:text-red-700 transition-colors duration-300"
                 title={translations[language].home}
               >
-                <FaHome className="w-4 h-4" />
+                <FaHome className="w-3.5 h-3.5" />
               </Link>
             </li>
             {pathnames.map((name, index) => {
@@ -64,29 +64,25 @@ const Breadcrumb = () => {
               const shouldTruncate = !categoryMatch && !isArticleSegment;
 
               const truncatedName =
-                shouldTruncate && displayName.length > 5
-                  ? displayName.slice(0, 5) + "..."
+                shouldTruncate && displayName.length > 15
+                  ? displayName.slice(0, 15) + "..."
                   : displayName;
 
               return (
-                <li key={name}>
-                  <div className="flex items-center">
-                    <FaChevronRight className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" />
-                    {isLast || isArticleSegment ? (
-                      <span className="ms-1 text-sm font-medium text-red-700 md:ms-2">
-                        <span className="md:hidden">{truncatedName}</span>
-                        <span className="hidden md:inline">{displayName}</span>
-                      </span>
-                    ) : (
-                      <Link
-                        href={routeTo}
-                        className="ms-1 text-sm font-medium text-gray-500 hover:text-red-700 md:ms-2 transition-colors"
-                      >
-                        <span className="md:hidden">{truncatedName}</span>
-                        <span className="hidden md:inline">{displayName}</span>
-                      </Link>
-                    )}
-                  </div>
+                <li key={name} className="flex items-center">
+                  <FaChevronRight className="w-2.5 h-2.5 text-gray-300 mx-2" />
+                  {isLast || isArticleSegment ? (
+                    <span className="text-[10px] md:text-[11px] font-bold text-red-700 uppercase tracking-widest">
+                      {displayName}
+                    </span>
+                  ) : (
+                    <Link
+                      href={routeTo}
+                      className="text-[10px] md:text-[11px] font-bold text-gray-500 hover:text-red-700 transition-colors duration-300 uppercase tracking-widest"
+                    >
+                      {truncatedName}
+                    </Link>
+                  )}
                 </li>
               );
             })}

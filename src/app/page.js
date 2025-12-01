@@ -64,11 +64,14 @@ const Home = () => {
     (node) => {
       if (isFetching) return;
       if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          dispatch(setHomeFeedPage(homeFeedPage + 1));
-        }
-      });
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasMore) {
+            dispatch(setHomeFeedPage(homeFeedPage + 1));
+          }
+        },
+        { rootMargin: "500px" }
+      );
       if (node) observer.current.observe(node);
     },
     [isFetching, hasMore, homeFeedPage, dispatch]
@@ -138,7 +141,7 @@ const Home = () => {
                     {language === "hi" ? "वीडियो समाचार" : "Video News"}
                   </h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6">
                   {videoNews.map((v) => (
                     <VideoCard
                       key={v.id}
@@ -178,7 +181,7 @@ const Home = () => {
                     {language === "hi" ? "ताज़ा खबरें" : "Latest News"}
                   </h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6">
                   {otherNews.map((news, i) => (
                     <div
                       key={news.id}

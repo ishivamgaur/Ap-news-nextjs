@@ -251,15 +251,15 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
       className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[60] p-4 animate-fadeIn"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col animate-slideUp border border-gray-100">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col animate-slideUp border border-gray-100">
         {/* Header */}
-        <div className="relative bg-linear-to-r from-red-800 to-red-900 p-3 md:p-4 text-white shrink-0">
+        <div className="relative bg-linear-to-r from-red-800 to-red-900 p-3 text-white shrink-0">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-2xl lg:text-3xl font-serif font-bold tracking-tight">
+              <h2 className="text-xl lg:text-2xl font-serif font-bold tracking-tight">
                 {language === "hi" ? "हमसे जुड़ें" : "Join Our Team"}
               </h2>
-              <p className="text-red-100 text-sm lg:text-base mt-2 font-medium opacity-90">
+              <p className="text-red-100 text-xs lg:text-sm mt-1 font-medium opacity-90">
                 {language === "hi"
                   ? "AP News के साथ पत्रकारिता में अपना करियर बनाएं"
                   : "Build your career in journalism with AP News"}
@@ -272,24 +272,24 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
               <FaTimes size={20} />
             </button>
           </div>
-          <div className="absolute -bottom-8 right-8 w-16 h-16 bg-white rounded-2xl rotate-3 flex items-center justify-center shadow-lg border-4 border-white/50 hidden md:flex">
+          <div className="absolute -bottom-8 right-8 w-16 h-16 bg-white rounded-2xl rotate-3 flex items-center justify-center shadow-lg border-4 border-white/50 hidden md:flex z-1000">
             <FaUser className="text-red-700 text-2xl" />
           </div>
         </div>
 
         {/* Form Container */}
-        <div className="overflow-y-auto p-6 md:p-8 grow custom-scrollbar">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="overflow-y-auto p-5 md:p-6 grow custom-scrollbar">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {submissionStatus && (
               <div
-                className={`p-4 rounded-xl text-center font-medium flex items-center justify-center gap-2 ${
+                className={`p-3 rounded-lg text-center font-medium flex items-center justify-center gap-2 text-sm ${
                   submissionStatus === "success"
                     ? "bg-green-50 text-green-700 border border-green-200"
                     : "bg-red-50 text-red-700 border border-red-200"
                 }`}
               >
                 {submissionStatus === "success" && (
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
                 )}
                 {submissionMessage}
               </div>
@@ -297,10 +297,10 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
 
             {submissionStatus !== "success" && (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Name Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi" ? "पूरा नाम" : "Full Name"}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -311,18 +311,18 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={
                           language === "hi" ? "आपका नाम" : "John Doe"
                         }
                       />
-                      <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Email Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       Email <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
@@ -332,16 +332,16 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.email}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder="john@example.com"
                       />
-                      <FaEnvelope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaEnvelope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Phone Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi" ? "फोन नंबर" : "Phone Number"}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -352,16 +352,16 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder="+91 98765 43210"
                       />
-                      <FaPhoneAlt className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaPhoneAlt className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* District Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi" ? "जिला" : "District"}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -371,7 +371,7 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.district}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 appearance-none cursor-pointer"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 appearance-none cursor-pointer hover:border-gray-300"
                       >
                         <option value="">
                           {language === "hi" ? "चुनें..." : "Select..."}
@@ -382,16 +382,16 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                           </option>
                         ))}
                       </select>
-                      <FaMapMarkerAlt className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaMapMarkerAlt className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                       <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                        <div className="w-2 h-2 border-r-2 border-b-2 border-gray-400 transform rotate-45"></div>
+                        <div className="w-1.5 h-1.5 border-r-2 border-b-2 border-gray-400 transform rotate-45"></div>
                       </div>
                     </div>
                   </div>
 
                   {/* Profession Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi" ? "पेशा" : "Profession"}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -402,20 +402,20 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.profession}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={
                           language === "hi"
                             ? "पत्रकार / छात्र"
                             : "Journalist / Student"
                         }
                       />
-                      <FaBriefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaBriefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Experience Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi"
                         ? "अनुभव (वर्ष)"
                         : "Experience (Years)"}{" "}
@@ -428,16 +428,16 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.experience}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={language === "hi" ? "2 वर्ष" : "2 Years"}
                       />
-                      <FaClock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaClock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Education Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi" ? "शिक्षा" : "Education"}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -448,16 +448,16 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.education}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={language === "hi" ? "स्नातक" : "Graduate"}
                       />
-                      <FaGraduationCap className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaGraduationCap className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Education Percentage Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi"
                         ? "प्रतिशत / CGPA"
                         : "Percentage / CGPA"}
@@ -469,16 +469,16 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.educationPercentage}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={language === "hi" ? "85%" : "85%"}
                       />
-                      <FaPercent className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaPercent className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Languages Field */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi" ? "भाषाएं" : "Languages Known"}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -489,20 +489,20 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         value={formData.languages}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={
                           language === "hi"
                             ? "हिंदी, अंग्रेजी, मैथिली"
                             : "Hindi, English, Maithili"
                         }
                       />
-                      <FaLanguage className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaLanguage className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Current Organization */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi"
                         ? "वर्तमान संगठन"
                         : "Current Organization"}
@@ -513,18 +513,18 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         name="currentOrganization"
                         value={formData.currentOrganization}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={
                           language === "hi" ? "एबीसी न्यूज" : "ABC News"
                         }
                       />
-                      <FaBuilding className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaBuilding className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Expected Salary */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi" ? "अपेक्षित वेतन" : "Expected Salary"}
                     </label>
                     <div className="relative">
@@ -533,20 +533,20 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         name="expectedSalary"
                         value={formData.expectedSalary}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={
                           language === "hi"
                             ? "₹ 25,000 / माह"
                             : "₹ 25,000 / Month"
                         }
                       />
-                      <FaRupeeSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaRupeeSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Notice Period */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi" ? "नोटिस अवधि" : "Notice Period"}
                     </label>
                     <div className="relative">
@@ -555,16 +555,16 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         name="noticePeriod"
                         value={formData.noticePeriod}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder={language === "hi" ? "15 दिन" : "15 Days"}
                       />
-                      <FaCalendarAlt className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaCalendarAlt className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Social Media Link */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi"
                         ? "सोशल मीडिया लिंक"
                         : "Social Media Link"}
@@ -575,16 +575,16 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         name="socialMediaLink"
                         value={formData.socialMediaLink}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder="https://linkedin.com/in/..."
                       />
-                      <FaLink className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaLink className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
 
                   {/* Portfolio Link */}
                   <div className="group">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                       {language === "hi"
                         ? "पोर्टफोलियो लिंक"
                         : "Portfolio Link"}
@@ -595,17 +595,17 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         name="portfolioLink"
                         value={formData.portfolioLink}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400"
+                        className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 hover:border-gray-300"
                         placeholder="https://youtube.com/..."
                       />
-                      <FaLink className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                      <FaLink className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                     </div>
                   </div>
                 </div>
 
                 {/* Bio / Why Join */}
-                <div className="group mt-6">
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                <div className="group mt-4">
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">
                     {language === "hi"
                       ? "आप AP News क्यों चुनना चाहते हैं?"
                       : "Why do you want to join AP News?"}
@@ -616,25 +616,25 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                       value={formData.bio}
                       onChange={handleInputChange}
                       rows="3"
-                      className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 font-medium text-gray-900 placeholder-gray-400 resize-none"
+                      className="w-full px-4 py-3 pl-12 bg-gray-50/50 border border-gray-200 rounded-xl focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 text-sm font-medium text-gray-900 placeholder-gray-400 resize-none hover:border-gray-300"
                       placeholder={
                         language === "hi"
                           ? "अपने बारे में संक्षेप में बताएं..."
                           : "Briefly tell us about yourself..."
                       }
                     ></textarea>
-                    <FaPen className="absolute left-4 top-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                    <FaPen className="absolute left-4 top-4 text-gray-400 group-focus-within:text-red-600 transition-colors duration-300 text-sm" />
                   </div>
                 </div>
 
                 {/* Upload Section */}
-                <div className="space-y-4 pt-4 border-t border-gray-100 mt-6">
-                  <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
-                    <span className="w-1 h-4 bg-red-600 rounded-full"></span>
+                <div className="space-y-3 pt-4 border-t border-gray-100 mt-4">
+                  <h3 className="text-xs font-bold text-gray-900 flex items-center gap-2">
+                    <span className="w-1 h-3 bg-red-600 rounded-full"></span>
                     {language === "hi" ? "दस्तावेज़ अपलोड" : "Upload Documents"}
                   </h3>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {/* Resume Upload */}
                     <label className="relative group cursor-pointer">
                       <input
@@ -646,22 +646,22 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         className="hidden"
                       />
                       <div
-                        className={`border-2 border-dashed rounded-xl p-4 text-center transition-all duration-200 h-full flex flex-col items-center justify-center gap-2 ${
+                        className={`border-2 border-dashed rounded-lg p-3 text-center transition-all duration-200 h-full flex flex-col items-center justify-center gap-1.5 ${
                           formData.resume
                             ? "border-green-300 bg-green-50/50"
                             : "border-gray-300 hover:border-red-400 hover:bg-red-50/30"
                         }`}
                       >
                         <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                          className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                             formData.resume
                               ? "bg-green-100 text-green-600"
                               : "bg-gray-100 text-gray-400 group-hover:bg-red-100 group-hover:text-red-500"
                           }`}
                         >
-                          <FaFilePdf className="text-lg" />
+                          <FaFilePdf className="text-sm" />
                         </div>
-                        <div className="text-sm font-medium text-gray-700">
+                        <div className="text-xs font-medium text-gray-700">
                           {formData.resume ? (
                             <span className="text-green-700 break-all line-clamp-1 px-2">
                               {formData.resume.name}
@@ -676,7 +676,7 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                           )}
                         </div>
                         {!formData.resume && (
-                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">
+                          <span className="text-[9px] text-gray-400 uppercase font-bold tracking-wider">
                             PDF, DOC (Max 5MB)
                           </span>
                         )}
@@ -688,9 +688,9 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                             e.preventDefault();
                             removeFile("resume");
                           }}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full hover:bg-red-600 shadow-md transition-transform hover:scale-110"
+                          className="absolute -top-1.5 -right-1.5 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 shadow-md transition-transform hover:scale-110"
                         >
-                          <FaTimes size={10} />
+                          <FaTimes size={8} />
                         </button>
                       )}
                     </label>
@@ -705,22 +705,22 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                         className="hidden"
                       />
                       <div
-                        className={`border-2 border-dashed rounded-xl p-4 text-center transition-all duration-200 h-full flex flex-col items-center justify-center gap-2 ${
+                        className={`border-2 border-dashed rounded-lg p-3 text-center transition-all duration-200 h-full flex flex-col items-center justify-center gap-1.5 ${
                           formData.demoVideo
                             ? "border-green-300 bg-green-50/50"
                             : "border-gray-300 hover:border-red-400 hover:bg-red-50/30"
                         }`}
                       >
                         <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                          className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                             formData.demoVideo
                               ? "bg-green-100 text-green-600"
                               : "bg-gray-100 text-gray-400 group-hover:bg-red-100 group-hover:text-red-500"
                           }`}
                         >
-                          <FaVideo className="text-lg" />
+                          <FaVideo className="text-sm" />
                         </div>
-                        <div className="text-sm font-medium text-gray-700">
+                        <div className="text-xs font-medium text-gray-700">
                           {formData.demoVideo ? (
                             <span className="text-green-700 break-all line-clamp-1 px-2">
                               {formData.demoVideo.name}
@@ -732,7 +732,7 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                           )}
                         </div>
                         {!formData.demoVideo && (
-                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">
+                          <span className="text-[9px] text-gray-400 uppercase font-bold tracking-wider">
                             MP4, MOV
                           </span>
                         )}
@@ -744,9 +744,9 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                             e.preventDefault();
                             removeFile("demoVideo");
                           }}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full hover:bg-red-600 shadow-md transition-transform hover:scale-110"
+                          className="absolute -top-1.5 -right-1.5 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 shadow-md transition-transform hover:scale-110"
                         >
-                          <FaTimes size={10} />
+                          <FaTimes size={8} />
                         </button>
                       )}
                     </label>
@@ -754,23 +754,23 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                 </div>
 
                 {/* Footer Actions */}
-                <div className="pt-6 mt-6 border-t border-gray-100 flex flex-col-reverse sm:flex-row gap-3">
+                <div className="pt-4 mt-4 border-t border-gray-100 flex flex-col-reverse sm:flex-row gap-3">
                   <button
                     type="button"
                     onClick={onClose}
                     disabled={isSubmitting}
-                    className="flex-1 px-6 py-3.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 font-semibold transition-all duration-200 disabled:opacity-50"
+                    className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-400 text-sm font-semibold transition-all duration-200 disabled:opacity-50"
                   >
                     {language === "hi" ? "रद्द करें" : "Cancel"}
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 px-6 py-3.5 bg-linear-to-r from-red-700 to-red-800 text-white rounded-xl hover:from-red-800 hover:to-red-900 font-bold tracking-wide shadow-lg shadow-red-200 hover:shadow-red-300 transition-all duration-200 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2.5 bg-linear-to-r from-red-700 to-red-800 text-white rounded-lg hover:from-red-800 hover:to-red-900 text-sm font-bold tracking-wide shadow-lg shadow-red-200 hover:shadow-red-300 transition-all duration-200 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         <span>
                           {language === "hi"
                             ? "प्रतीक्षा करें..."
@@ -779,7 +779,7 @@ const JoinTeamPopup = ({ isOpen, onClose, language }) => {
                       </>
                     ) : (
                       <>
-                        <FaUpload className="text-sm" />
+                        <FaUpload className="text-xs" />
                         <span>
                           {language === "hi"
                             ? "आवेदन जमा करें"

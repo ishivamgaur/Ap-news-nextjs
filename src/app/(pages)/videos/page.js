@@ -52,19 +52,15 @@ const VideosPage = () => {
   const transformedVideos = videos.map(transformVideoItem);
   const featuredVideo = transformedVideos[0];
   const remainingVideos = transformedVideos.slice(1);
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-30">
+      <div className="border-gray-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center gap-3">
-          <div className="p-3 bg-red-50 rounded-full">
-            <FaFilm className="text-red-700 text-xl" />
-          </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-none">
-              {language === "hi" ? "वीडियो गैलरी" : "Video Gallery"}
-            </h1>
+            <h2 className="text-2xl font-bold text-gray-900 border-l-4 border-red-700 pl-4 flex items-center gap-2">
+              {language === "hi" ? "प्रमुख वीडियो" : "Featured Video"}
+            </h2>
             <p className="text-xs md:text-sm text-gray-500 mt-1">
               {language === "hi"
                 ? "नवीनतम समाचार और विशेष रिपोर्ट देखें"
@@ -78,9 +74,6 @@ const VideosPage = () => {
         {/* Featured Video Section */}
         {featuredVideo && !isLoading && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 border-l-4 border-red-700 pl-4 mb-6 flex items-center gap-2">
-              {language === "hi" ? "प्रमुख वीडियो" : "Featured Video"}
-            </h2>
             <div
               className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-lg group cursor-pointer"
               onClick={() =>
