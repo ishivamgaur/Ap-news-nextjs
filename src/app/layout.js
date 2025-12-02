@@ -30,8 +30,62 @@ const inter = Inter({
 
 // 🧠 Metadata (SEO)
 export const metadata = {
-  title: "AP News | Latest Updates",
-  description: "Breaking news, live videos, and updates from AP News.",
+  metadataBase: new URL("https://apnewsbihar.in"), // Replace with your actual domain
+  title: {
+    default: "AP News | Latest Updates",
+    template: "%s | AP News",
+  },
+  description:
+    "Breaking news, live videos, and updates from AP News. Stay informed with the latest headlines in Technology, Sports, Business, and more.",
+  keywords: [
+    "News",
+    "Breaking News",
+    "India News",
+    "World News",
+    "Technology",
+    "Sports",
+    "Business",
+    "Bhojpuri",
+    "Elections",
+    "Live News",
+  ],
+  authors: [{ name: "AP News Team" }],
+  creator: "AP News",
+  publisher: "AP News",
+  openGraph: {
+    title: "AP News | Latest Updates",
+    description: "Breaking news, live videos, and updates from AP News.",
+    url: "https://apnewsbihar.in",
+    siteName: "AP News",
+    images: [
+      {
+        url: "/Ap-news.png", // Ensure this image exists in public folder
+        width: 1200,
+        height: 630,
+        alt: "AP News Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AP News | Latest Updates",
+    description: "Breaking news, live videos, and updates from AP News.",
+    images: ["/Ap-news.png"], // Ensure this image exists in public folder
+    creator: "@apnews", // Replace with actual handle if available
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 // 🧱 Root Layout

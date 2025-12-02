@@ -77,5 +77,37 @@ export default async function ArticlePage({ params }) {
   const { id } = await params;
   const article = await getArticle(id);
 
-  return <ArticleContent article={article} />;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title?.en || "AP News Article",
+    description: article.description?.en || "Read the latest news on AP News.",
+    image: [article.featuredImage?.url || "/Ap-news.png"],
+    datePublished: article.publishAt,
+    dateModified: article.updatedAt || article.publishAt,
+    author: [
+      {
+        "@type": "Person",
+        name: article.author || "AP News Team",
+      },
+    ],
+    publisher: {
+      "@type": "Organization",
+      name: "AP News",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://apnewsbihar.in/Ap-news.png", // Replace with actual domain
+      },
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ArticleContent article={article} />
+    </>
+  );
 }
