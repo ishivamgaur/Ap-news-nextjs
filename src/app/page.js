@@ -54,6 +54,7 @@ const Home = () => {
       : item.youtubeVideoId?.includes("youtu.be/")
       ? item.youtubeVideoId.split("youtu.be/")[1]?.split("?")[0]
       : item.youtubeVideoId,
+    views: item.views || 0,
   });
 
   const transformedNews = allNews.map(transformNewsItem);

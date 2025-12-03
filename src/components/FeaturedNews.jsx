@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useLanguage } from "../context/LanguageContext";
+import { FaEye } from "react-icons/fa";
 
 const FeaturedNews = ({ news, onPlay }) => {
   const { language } = useLanguage();
@@ -21,11 +22,13 @@ const FeaturedNews = ({ news, onPlay }) => {
           <img
             src={mainStory.image}
             alt={mainStory.title[language]}
-            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            className={`w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 ${
+              mainStory.youtubeVideoId ? "brightness-75" : ""
+            }`}
           />
           {mainStory.youtubeVideoId && (
             <div
-              className="absolute top-4 right-4 bg-red-600 text-white p-2.5 rounded-full shadow-lg z-20 hover:bg-red-700 transition-colors"
+              className="absolute top-4 right-4 bg-red-600 text-white p-2.5 rounded-full shadow-lg z-20 hover:bg-red-700 transition-colors cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -45,6 +48,11 @@ const FeaturedNews = ({ news, onPlay }) => {
                 />
               </svg>
             </div>
+          )}
+          {mainStory.views > 0 && (
+            <span className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 z-20">
+              <FaEye className="w-3 h-3" /> {mainStory.views}
+            </span>
           )}
         </div>
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent">
@@ -88,11 +96,13 @@ const FeaturedNews = ({ news, onPlay }) => {
             <img
               src={story.image}
               alt={story.title[language]}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${
+                story.youtubeVideoId ? "brightness-75" : ""
+              }`}
             />
             {story.youtubeVideoId && (
               <div
-                className="absolute top-3 right-3 bg-red-600/90 text-white p-1.5 rounded-full shadow-md z-20 hover:bg-red-700 transition-colors backdrop-blur-sm"
+                className="absolute top-3 right-3 bg-red-600/90 text-white p-1.5 rounded-full shadow-md z-20 hover:bg-red-700 transition-colors backdrop-blur-sm cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -112,6 +122,11 @@ const FeaturedNews = ({ news, onPlay }) => {
                   />
                 </svg>
               </div>
+            )}
+            {story.views > 0 && (
+              <span className="absolute top-3 left-3 bg-black/80 backdrop-blur-sm text-white px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 z-20">
+                <FaEye className="w-2.5 h-2.5" /> {story.views}
+              </span>
             )}
             <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent">
               <div className="absolute bottom-0 left-0 right-0 p-5 text-white">

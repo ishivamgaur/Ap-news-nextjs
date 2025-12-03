@@ -96,7 +96,7 @@ const Navbar = () => {
               </Link>
               <button
                 onClick={() => setIsJoinPopupOpen(true)}
-                className="flex items-center space-x-1.5 xl:space-x-2 bg-linear-to-r from-red-700 to-red-800 text-white px-3 xl:px-5 py-1.5 xl:py-2.5 rounded-full hover:shadow-lg hover:from-red-800 hover:to-red-900 transition-all duration-300 font-bold text-xs lg:text-[11px] xl:text-xs 2xl:text-sm tracking-wide transform hover:-translate-y-0.5"
+                className="flex items-center space-x-1.5 xl:space-x-2 bg-linear-to-r from-red-700 to-red-800 text-white px-3 xl:px-5 py-1 xl:py-2 rounded-full hover:shadow-lg hover:from-red-800 hover:to-red-900 transition-all duration-300 font-bold text-xs lg:text-[11px] xl:text-xs 2xl:text-xs tracking-wide transform hover:-translate-y-0.5"
               >
                 <FaUserPlus size={12} className="xl:w-[14px] xl:h-[14px]" />
                 <span>{language === "hi" ? "हमसे जुड़ें" : "JOIN TEAM"}</span>

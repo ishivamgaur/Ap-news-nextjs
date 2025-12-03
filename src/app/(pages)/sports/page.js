@@ -2,10 +2,12 @@
 import { useState, useCallback, useRef } from "react";
 import NewsCard from "@/components/NewsCard";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton";
+import VideoModal from "@/components/VideoModal";
 import { useGetSportsArticlesQuery } from "@/store/api/articleApi";
 
 const SportsPage = () => {
   const [page, setPage] = useState(1);
+  const [playingVideo, setPlayingVideo] = useState(null);
   const observer = useRef();
   const transformNewsItem = (item) => ({
     id: item._id,
@@ -16,6 +18,7 @@ const SportsPage = () => {
     category: item.category,
     date: item.publishAt,
     youtubeVideoId: item.youtubeVideoId,
+    views: item.views,
   });
 
   const { data, isLoading, isFetching, isError } =
@@ -37,6 +40,11 @@ const SportsPage = () => {
     },
     [isFetching, hasMore]
   );
+
+  const handlePlayVideo = (videoId, articleId, category) => {
+    setPlayingVideo({ videoId, articleId, category });
+  };
+  const handleCloseModal = () => setPlayingVideo(null);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,7 +78,12 @@ const SportsPage = () => {
                     key={news.id}
                     ref={i === articles.length - 1 ? lastNewsElementRef : null}
                   >
-                    <NewsCard news={news} />
+                    <NewsCard
+                      news={news}
+                      onPlay={(videoId) =>
+                        handlePlayVideo(videoId, news.id, news.category)
+                      }
+                    />
                   </div>
                 ))}
                 {isFetching &&
@@ -92,6 +105,12 @@ const SportsPage = () => {
           </div>
         )}
       </div>
+      <VideoModal
+        videoId={playingVideo?.videoId}
+        articleId={playingVideo?.articleId}
+        category={playingVideo?.category}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };

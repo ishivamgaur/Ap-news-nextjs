@@ -3,10 +3,12 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import NewsCard from "@/components/NewsCard.jsx";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton.jsx";
+import VideoModal from "@/components/VideoModal";
 import { useGetAllNewsArticlesQuery } from "@/store/api/articleApi.js";
 
 const AllNewsPage = () => {
   const [page, setPage] = useState(1);
+  const [playingVideo, setPlayingVideo] = useState(null);
   const observer = useRef();
   const transformNewsItem = (item) => ({
     id: item._id,
@@ -17,6 +19,7 @@ const AllNewsPage = () => {
     category: item.category,
     date: item.publishAt,
     youtubeVideoId: item.youtubeVideoId,
+    views: item.views,
   });
 
   const { data, isLoading, isFetching, isError } =
@@ -39,15 +42,23 @@ const AllNewsPage = () => {
     (node) => {
       if (isFetching) return;
       if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setPage((prev) => prev + 1);
-        }
-      }, { rootMargin: "500px" });
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasMore) {
+            setPage((prev) => prev + 1);
+          }
+        },
+        { rootMargin: "500px" }
+      );
       if (node) observer.current.observe(node);
     },
     [isFetching, hasMore]
   );
+
+  const handlePlayVideo = (videoId, articleId, category) => {
+    setPlayingVideo({ videoId, articleId, category });
+  };
+  const handleCloseModal = () => setPlayingVideo(null);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -83,7 +94,12 @@ const AllNewsPage = () => {
                     key={news.id}
                     ref={i === articles.length - 1 ? lastNewsElementRef : null}
                   >
-                    <NewsCard news={news} />
+                    <NewsCard
+                      news={news}
+                      onPlay={(videoId) =>
+                        handlePlayVideo(videoId, news.id, news.category)
+                      }
+                    />
                   </div>
                 ))}
                 {isFetching &&
@@ -107,6 +123,12 @@ const AllNewsPage = () => {
           </>
         )}
       </div>
+      <VideoModal
+        videoId={playingVideo?.videoId}
+        articleId={playingVideo?.articleId}
+        category={playingVideo?.category}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };
