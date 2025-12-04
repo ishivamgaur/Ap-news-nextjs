@@ -39,7 +39,7 @@ const RightSidebarNews = () => {
   const renderPlayer = () => {
     if (isLiveLoading) {
       return (
-        <p className="text-white text-center text-lg">
+        <p className="text-white text-center text-md lg:text-sm xl:text-sm">
           Searching for live stream...
         </p>
       );
@@ -47,7 +47,7 @@ const RightSidebarNews = () => {
 
     if (liveError) {
       return (
-        <p className="text-red-400 text-center text-lg">
+        <p className="text-red-400 text-center text-md lg:text-sm xl:text-sm">
           {liveError.data?.message || "Could not fetch video."}
         </p>
       );
@@ -69,7 +69,11 @@ const RightSidebarNews = () => {
       );
     }
 
-    return <p className="text-white text-center text-lg">No video found.</p>;
+    return (
+      <p className="text-white text-center text-md lg:text-sm xl:text-sm">
+        No video found.
+      </p>
+    );
   };
 
   const exitPoleDummy = {

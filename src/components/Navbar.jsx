@@ -22,6 +22,7 @@ const Navbar = () => {
       { name: { en: "BUSINESS", hi: "व्यापार" }, path: "/business" },
       { name: { en: "SPORTS", hi: "खेल" }, path: "/sports" },
       { name: { en: "TECHNOLOGY", hi: "टेक" }, path: "/technology" },
+      { name: { en: "ENTERTAINMENT", hi: "मनोरंजन" }, path: "/entertainment" },
       { name: { en: "ELECTIONS", hi: "चुनाव" }, path: "/elections" },
     ],
     []
@@ -44,7 +45,7 @@ const Navbar = () => {
     <>
       <nav className="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50 transition-all duration-300 border-b border-gray-100">
         <div className="max-w-7xl px-2 mx-auto">
-          <div className="flex justify-between items-center h-18 lg:h-14">
+          <div className="flex justify-between lg:justify-start items-center h-18 lg:h-14">
             <Link href="/" className="flex items-center  group">
               <div className="bg-transparent py-1 rounded flex items-center gap-2 transition-transform duration-300 group-hover:scale-105">
                 <img
@@ -55,12 +56,12 @@ const Navbar = () => {
               </div>
             </Link>
 
-            <div className="hidden lg:flex items-center space-x-6 xl:space-x-8 ml-6 xl:ml-10">
+            <div className="hidden lg:flex items-center space-x-6 xl:space-x-8 ml-auto">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   href={link.path}
-                  className={`relative font-bold text-xs lg:text-[11px] xl:text-xs 2xl:text-sm tracking-wide transition-all duration-300 py-1 xl:py-2 ${
+                  className={`relative font-bold text-[10px] lg:text-[10px] xl:text-[11px] 2xl:text-xs tracking-wide transition-all duration-300 py-1 xl:py-2 ${
                     pathname === link.path
                       ? "text-red-700 after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-full after:bg-red-700 after:rounded-full"
                       : "text-gray-600 hover:text-red-700 after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-red-700 after:transition-all after:duration-300 hover:after:w-full after:rounded-full"
@@ -71,10 +72,10 @@ const Navbar = () => {
               ))}
             </div>
 
-            <div className="hidden lg:flex items-center space-x-3 xl:space-x-5 select-none">
+            <div className="hidden lg:flex items-center space-x-3 xl:space-x-5 select-none ml-4 xl:ml-6">
               <Link
                 href={liveLink.path}
-                className={`relative font-bold text-xs lg:text-[11px] xl:text-xs 2xl:text-sm tracking-wider transition-all duration-300 px-3 xl:px-4 py-1 xl:py-1.5 rounded-full flex items-center gap-1.5 xl:gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${
+                className={`relative font-bold text-[10px] lg:text-[10px] xl:text-[11px] 2xl:text-xs tracking-wider transition-all duration-300 px-2 xl:px-3 py-0.5 xl:py-1 rounded-full flex items-center gap-1.5 xl:gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${
                   pathname === liveLink.path
                     ? "bg-linear-to-r from-red-600 to-red-700 text-white ring-2 ring-red-200"
                     : "bg-white text-red-700 border border-red-100 hover:border-red-200"
@@ -96,18 +97,18 @@ const Navbar = () => {
               </Link>
               <button
                 onClick={() => setIsJoinPopupOpen(true)}
-                className="flex items-center space-x-1.5 xl:space-x-2 bg-linear-to-r from-red-700 to-red-800 text-white px-3 xl:px-5 py-1 xl:py-2 rounded-full hover:shadow-lg hover:from-red-800 hover:to-red-900 transition-all duration-300 font-bold text-xs lg:text-[11px] xl:text-xs 2xl:text-xs tracking-wide transform hover:-translate-y-0.5"
+                className="flex items-center space-x-1.5 xl:space-x-2 bg-linear-to-r from-red-700 to-red-800 text-white px-2 xl:px-3 py-0.5 xl:py-1.5 rounded-full hover:shadow-lg hover:from-red-800 hover:to-red-900 transition-all duration-300 font-bold text-[10px] lg:text-[10px] xl:text-[11px] 2xl:text-xs tracking-wide transform hover:-translate-y-0.5"
               >
                 <FaUserPlus size={12} className="xl:w-[14px] xl:h-[14px]" />
                 <span>{language === "hi" ? "हमसे जुड़ें" : "JOIN TEAM"}</span>
               </button>
 
               <div
-                className="flex items-center cursor-pointer bg-gray-100 rounded-full p-0.5 xl:p-1 border border-gray-200"
+                className="flex items-center cursor-pointer bg-gray-100 rounded-full p-[2px] border border-gray-200"
                 onClick={toggleLanguage}
               >
                 <span
-                  className={`px-2 xl:px-3 py-0.5 xl:py-1 text-[10px] lg:text-[10px] xl:text-xs font-bold rounded-full transition-all duration-300 ${
+                  className={`px-1.5 xl:px-2 py-px xl:py-0.5 text-[9px] lg:text-[9px] xl:text-[10px] font-bold rounded-full transition-all duration-300 ${
                     language === "en"
                       ? "bg-white text-red-700 shadow-sm"
                       : "text-gray-500 hover:text-gray-700"
@@ -116,7 +117,7 @@ const Navbar = () => {
                   EN
                 </span>
                 <span
-                  className={`px-2 xl:px-3 py-0.5 xl:py-1 text-[10px] lg:text-[10px] xl:text-xs font-bold rounded-full transition-all duration-300 ${
+                  className={`px-1.5 xl:px-2 py-px xl:py-0.5 text-[9px] lg:text-[9px] xl:text-[10px] font-bold rounded-full transition-all duration-300 ${
                     language === "hi"
                       ? "bg-white text-red-700 shadow-sm"
                       : "text-gray-500 hover:text-gray-700"
