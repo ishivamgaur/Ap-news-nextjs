@@ -1,10 +1,10 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useSearchArticlesQuery } from "../../store/api/searchApi";
+import { useSearchArticlesQuery } from "../../../store/api/searchApi.js";
 import { FaSpinner } from "react-icons/fa";
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
-import NewsCard from "../../components/NewsCard";
-import NewsCardSkeleton from "../../components/NewsCardSkeleton";
+import NewsCard from "../../../components/NewsCard";
+import NewsCardSkeleton from "../../../components/NewsCardSkeleton";
 
 const SearchContent = () => {
   const searchParams = useSearchParams();
@@ -27,12 +27,12 @@ const SearchContent = () => {
 
   // Append new articles when data changes
   useEffect(() => {
-    if (data?.articles) {
+    if (data?.suggestions?.articles) {
       if (page === 1) {
-        setArticles(data.articles);
+        setArticles(data.suggestions.articles);
       } else {
         setArticles((prev) => {
-          const newArticles = data.articles.filter(
+          const newArticles = data.suggestions.articles.filter(
             (newArt) => !prev.some((prevArt) => prevArt._id === newArt._id)
           );
           return [...prev, ...newArticles];
@@ -41,8 +41,8 @@ const SearchContent = () => {
 
       // Check if we have loaded all available articles
       if (
-        data.total &&
-        (page * 10 >= data.total || data.articles.length < 10)
+        data?.suggestions?.total &&
+        (page * 10 >= data?.suggestions?.total || data?.suggestions?.articles.length < 10)
       ) {
         setHasMore(false);
       } else {
@@ -80,7 +80,7 @@ const SearchContent = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-16">
-          Total {data?.total || 0} Search Results for{" "}
+          Total {data?.suggestions?.total || 0} Search Results for{" "}
           <span className="text-red-700">"{query}"</span>
         </h1>
 

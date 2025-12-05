@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/utils/constant";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axios from "axios";
 
@@ -26,7 +27,7 @@ const axiosBaseQuery =
 
 export const articleApiSlice = createApi({
   reducerPath: "articleApi",
-  baseQuery: axiosBaseQuery({ baseUrl: "https://ap-news-b.onrender.com/api" }),
+  baseQuery: axiosBaseQuery({ baseUrl: API_BASE_URL }),
   tagTypes: ["Articles"],
   endpoints: (builder) => ({
     //! GET ALL ARTICLES

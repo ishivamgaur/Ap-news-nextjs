@@ -79,7 +79,7 @@ const NewsCard = ({ news, onPlay }) => {
             .join(" ")}
         </span>
         {news.views > 0 && (
-          <span className="absolute top-3 right-3 bg-black/80 backdrop-blur-sm text-white px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 z-10">
+          <span className="absolute top-3 right-3 bg-black/10 backdrop-blur-md text-white px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 z-10">
             <FaEye className="w-2.5 h-2.5" /> {news.views}
           </span>
         )}

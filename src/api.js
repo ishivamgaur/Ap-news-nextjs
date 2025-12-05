@@ -1,8 +1,8 @@
 import axios from "axios";
+import { API_BASE_URL } from "./utils/constant";
 
 const apiClient = axios.create({
-  // baseURL: "http://localhost:5000/api", // local backend server URL
-  baseURL: "https://ap-news-backend.onrender.com/api", // Your backend server URL
+  baseURL: API_BASE_URL
 });
 
 export default apiClient;

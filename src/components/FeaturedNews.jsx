@@ -50,7 +50,7 @@ const FeaturedNews = ({ news, onPlay }) => {
             </div>
           )}
           {mainStory.views > 0 && (
-            <span className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 z-20">
+            <span className="absolute top-4 left-4 bg-black/10 backdrop-blur-sm text-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 z-20">
               <FaEye className="w-3 h-3" /> {mainStory.views}
             </span>
           )}
@@ -124,7 +124,7 @@ const FeaturedNews = ({ news, onPlay }) => {
               </div>
             )}
             {story.views > 0 && (
-              <span className="absolute top-3 left-3 bg-black/80 backdrop-blur-sm text-white px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 z-20">
+              <span className="absolute top-3 left-3 bg-black/10 backdrop-blur-sm text-white px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 z-20">
                 <FaEye className="w-2.5 h-2.5" /> {story.views}
               </span>
             )}

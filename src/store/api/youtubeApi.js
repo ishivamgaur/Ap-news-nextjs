@@ -1,9 +1,10 @@
+import { API_BASE_URL } from "@/utils/constant";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Define a service using a base URL and expected endpoints
 export const youtubeApi = createApi({
   reducerPath: "youtubeApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://ap-news-b.onrender.com/api" }), // Assuming your backend proxy is at /api
+  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }), // Assuming your backend proxy is at /api
   tagTypes: ["LiveVideo"],
   endpoints: (builder) => ({
     getLiveVideo: builder.query({
