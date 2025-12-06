@@ -294,6 +294,17 @@ export const articleApiSlice = createApi({
       },
       providesTags: ["Articles"],
     }),
+
+    // GET TRENDING ARTICLES
+    getTrendingArticles: builder.query({
+      query: () => ({
+        url: `/articles/trending`,
+        method: "get",
+      }),
+      transformResponse: (response) => response,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      providesTags: ["Articles"],
+    }),
   }),
 });
 
@@ -307,4 +318,5 @@ export const {
   useGetArticleByIdQuery,
   useGetVideosArticlesQuery,
   useGetArticlesByCategoryQuery,
+  useGetTrendingArticlesQuery,
 } = articleApiSlice;

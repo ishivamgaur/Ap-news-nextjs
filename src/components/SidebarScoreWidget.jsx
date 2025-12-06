@@ -3,9 +3,12 @@ import React, { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import AdComponent from "./AdComponent";
 import Link from "next/link";
+import { FaEye } from "react-icons/fa";
+import { useGetTrendingArticlesQuery } from "../store/api/articleApi";
 
 const SidebarScoreWidget = () => {
   const { language } = useLanguage();
+  const { data: trendingArticles, isLoading } = useGetTrendingArticlesQuery();
 
   // --- Countdown Logic ---
   const electionDate = new Date("2025-11-14T00:00:00");
@@ -88,27 +91,79 @@ const SidebarScoreWidget = () => {
 
       {/* Scrollable Content */}
       <div className="grow overflow-y-auto pr-2 space-y-6">
-        {/* Live Cricket Scores */}
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-1 h-5 bg-red-700 rounded-full"></div>
-            <h2 className="text-lg lg:text-sm xl:text-lg font-bold text-gray-900">
-              {language === "hi" ? "लाइव स्कोर" : "Live Scores"}
-            </h2>
+        {/* Trending Articles Section */}
+        {isLoading ? (
+          <div className="mb-6 animate-pulse">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-1 h-5 bg-gray-200 rounded-full"></div>
+              <div className="h-5 w-32 bg-gray-200 rounded"></div>
+            </div>
+            <div className="space-y-3">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex gap-3 items-start p-2">
+                  <div className="shrink-0 w-16 h-16 lg:w-12 lg:h-12 xl:w-16 xl:h-16 bg-gray-200 rounded-md"></div>
+                  <div className="grow space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                    <div className="h-3 bg-gray-200 rounded w-16 mt-1"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+        ) : trendingArticles?.articles?.length > 0 ? (
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-1 h-5 bg-red-700 rounded-full"></div>
+              <h2 className="text-lg lg:text-sm xl:text-lg font-bold text-gray-900">
+                {language === "hi" ? "ट्रेंडिंग न्यूज़" : "Trending Now"}
+              </h2>
+            </div>
 
-          <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-gray-50 h-[400px]">
-            <iframe
-              src="https://cwidget.crictimes.org/?v=1.1&a=de0c0c"
-              title={
-                language === "hi" ? "लाइव क्रिकेट स्कोर" : "Live Cricket Scores"
-              }
-              className="w-full h-full"
-              style={{ border: 0 }}
-              loading="lazy"
-            />
+            <div className="space-y-3">
+              {trendingArticles.articles.slice(0, 5).map((article) => (
+                <Link
+                  key={article._id}
+                  href={`${
+                    article.category.toLowerCase() === "general"
+                      ? "news"
+                      : `${article.category.toLowerCase()}`
+                  }/article/${article._id}`}
+                  className="group flex gap-3 items-start p-2 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100"
+                >
+                  {/* Image */}
+                  <div className="shrink-0 w-16 h-16 lg:w-12 lg:h-12 xl:w-10 xl:min-h-[60px] flex items-center rounded-md overflow-hidden">
+                    {article.featuredImage ? (
+                      <img
+                        src={article.featuredImage?.url}
+                        alt={article.featuredImage?.alt}
+                        className="w-full h-[40px] rounded-md object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                        <span className="text-xs">No Img</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="grow min-w-0">
+                    <h4 className="text-sm lg:text-xs xl:text-xs font-semibold text-gray-800 line-clamp-4 group-hover:text-red-700 transition-colors leading-snug">
+                      {article.title[language] || article.title.en}
+                    </h4>
+
+                    {/* <div className="flex items-center gap-2 mt-1.5">
+                      <span className="flex items-center gap-1 text-[10px] lg:text-[9px] xl:text-[10px] text-gray-500 font-medium bg-gray-100 px-1.5 py-0.5 rounded-full">
+                        <FaEye size={10} />{" "}
+                        {(article.views || 0).toLocaleString()}
+                      </span>
+                    </div> */}
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : null}
 
         {/* Ads Section */}
         <div className="space-y-4">

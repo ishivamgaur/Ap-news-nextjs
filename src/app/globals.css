@@ -24,6 +24,10 @@
 html,
 body {
   font-size: 12px;
+}
+
+/* 🌍 Global Custom Scrollbar (applies to entire HTML page) */
+* {
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: var(--scroll-thumb) var(--scroll-track);
 }
@@ -40,8 +44,8 @@ body {
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
 
-  --scroll-thumb: rgba(185, 28, 28, 0.7); /* red-700 */
-  --scroll-thumb-hover: rgba(153, 27, 27, 0.9); /* red-800 */
+  --scroll-thumb: rgba(185, 28, 28, 0.171); /* red-700 */
+  --scroll-thumb-hover: rgba(153, 27, 27, 0.573); /* red-800 */
   --scroll-track: transparent;
 }
 
@@ -56,22 +60,20 @@ body {
 ::-webkit-scrollbar,
 *::-webkit-scrollbar,
 body::-webkit-scrollbar {
-  width: 2px !important;
-  height: 2px !important;
+  width: 1px !important;
+  height: 1px !important;
 }
 
 ::-webkit-scrollbar-track,
 *::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track {
   background: var(--scroll-track);
-  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb,
 *::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
   background-color: var(--scroll-thumb);
-  border-radius: 9999px;
   transition: background-color 0.2s ease;
 }
 
