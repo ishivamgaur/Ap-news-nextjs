@@ -9,6 +9,7 @@ import VideoModal from "@/components/VideoModal";
 import { useState } from "react";
 
 const ArticleContent = ({ article }) => {
+  console.log("article: ", article);
   const { language } = useLanguage();
   const [playingVideoId, setPlayingVideoId] = useState(null);
 
@@ -35,7 +36,7 @@ const ArticleContent = ({ article }) => {
   };
 
   const title = getLocalizedContent("title");
-  const description = getLocalizedContent("description");
+  const summary = getLocalizedContent("summary");
   const content = getLocalizedContent("content"); // Assuming content is HTML or rich text
   const category = article.category || "General";
   const date = new Date(
@@ -47,7 +48,7 @@ const ArticleContent = ({ article }) => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-900 pt-6 lg:pt-6 xl:pt-8 2xl:pt-10 pb-12 lg:pb-12 xl:pb-16 2xl:pb-20">
+    <div className="min-h-screen bg-gray-50  text-gray-900 pt-6 lg:pt-6 xl:pt-8 2xl:pt-10 pb-12 lg:pb-12 xl:pb-16 2xl:pb-20">
       <div className="max-w-5xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 xl:px-4">
         {/* Article Header */}
         <header className="mb-6 lg:mb-6 xl:mb-8 2xl:mb-10">
@@ -115,17 +116,17 @@ const ArticleContent = ({ article }) => {
           )}
         </div>
 
-        {/* Summary / Description */}
-        {description && (
+        {/* Summary */}
+        {summary && (
           <div className="mb-6 lg:mb-6 xl:mb-8 2xl:mb-10 p-5 lg:p-5 xl:p-6 bg-gray-50 rounded-xl border-l-4 border-red-700">
-            <p className="text-base md:text-lg lg:text-lg xl:text-xl text-gray-700 italic leading-relaxed font-serif">
-              {description}
+            <p className="text-md md:text-lg lg:text-lg xl:text-xl text-gray-700 tracking-wide leading-7">
+              {summary}
             </p>
           </div>
         )}
 
         {/* Main Content */}
-        <article className="prose prose-base md:prose-lg lg:prose-lg xl:prose-xl max-w-none prose-headings:font-serif prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-red-700 hover:prose-a:text-red-800 prose-img:rounded-xl prose-strong:text-gray-900">
+        <article className="prose leading-7 prose-base md:prose-lg lg:prose-lg xl:prose-xl max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-8 tracking-wide [word-spacing:2px] prose-a:text-red-700 hover:prose-a:text-red-800 prose-img:rounded-xl prose-strong:text-gray-900">
           <div dangerouslySetInnerHTML={{ __html: content || "" }} />
         </article>
 

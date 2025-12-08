@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-outfit: var(--font-outfit);
+}
+
 .marquee-container {
   display: flex;
   width: 100%;

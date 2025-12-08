@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-gray-50 font-sans pt-6 lg:pt-6 xl:pt-8 2xl:pt-10 pb-12 lg:pb-12 xl:pb-16 2xl:pb-20">
+    <div className="min-h-screen bg-gray-50 pt-6 lg:pt-6 xl:pt-8 2xl:pt-10 pb-12 lg:pb-12 xl:pb-16 2xl:pb-20">
       <div className="max-w-5xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 xl:px-4">
         {/* Header Skeleton */}
         <div className="mb-6 lg:mb-6 xl:mb-8 2xl:mb-10 animate-pulse">

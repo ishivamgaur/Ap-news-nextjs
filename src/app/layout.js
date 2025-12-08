@@ -1,4 +1,3 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import StoreProvider from "@/store/StoreProvider";
@@ -14,7 +13,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // 🖋️ Fonts
-import { Merriweather, Inter } from "next/font/google";
+import { Merriweather, Inter, Outfit } from "next/font/google";
 
 // 🖋️ Fonts
 const merriweather = Merriweather({
@@ -26,6 +25,12 @@ const merriweather = Merriweather({
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 // 🧠 Metadata (SEO)
@@ -101,7 +106,7 @@ export default function RootLayout({ children }) {
         ></Script>
       </Head>
       <body
-        className={`${merriweather.variable} ${inter.variable} antialiased flex flex-col min-h-screen font-sans bg-gray-50 text-gray-900`}
+        className={`${merriweather.variable} ${inter.variable} ${outfit.variable} antialiased flex flex-col min-h-screen font-outfit bg-gray-50 text-gray-900`}
       >
         <StoreProvider>
           <LanguageProvider>

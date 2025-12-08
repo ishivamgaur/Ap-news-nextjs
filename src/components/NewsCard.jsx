@@ -85,7 +85,7 @@ const NewsCard = ({ news, onPlay }) => {
         )}
       </div>
       <div className="p-3 flex flex-col grow">
-        <h3 className="font-bold text-sm md:text-[14px] lg:text-xs xl:text-sm mb-2 line-clamp-2 text-gray-900 group-hover:text-red-700 transition-colors leading-tight font-serif">
+        <h3 className="font-bold text-sm md:text-[14px] lg:text-xs xl:text-sm mb-2 line-clamp-2 text-gray-900 group-hover:text-red-700 transition-colors leading-5 font-serif">
           <Link
             href={
               news.category == "General"

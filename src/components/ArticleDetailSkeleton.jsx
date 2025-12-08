@@ -2,7 +2,7 @@ import React from "react";
 
 const ArticleDetailSkeleton = () => {
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-900 pt-8 pb-16 animate-pulse">
+    <div className="min-h-screen bg-white  text-gray-900 pt-8 pb-16 animate-pulse">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Skeleton */}
         <div className="flex items-center gap-2 mb-8">
