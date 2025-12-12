@@ -1,5 +1,3 @@
-// data/navLinks.ts
-
 import {
   FaHome,
   FaNewspaper,
@@ -10,6 +8,11 @@ import {
   FaMusic,
   FaTv,
   FaMapMarkerAlt,
+  FaVoteYea,
+  FaVideo,
+  FaFilm,
+  FaBroadcastTower,
+  FaStar,
 } from "react-icons/fa";
 
 import { MdSmartphone, MdSportsCricket, MdSportsHockey } from "react-icons/md";
@@ -22,16 +25,12 @@ import { GiBrain, GiMaterialsScience } from "react-icons/gi";
 
 export const navLinks = [
   //
-  // HOME
-  //
   {
     name: { en: "HOME", hi: "होम" },
     path: "/",
     icon: FaHome,
     origin: "left",
   },
-
-  //
   // NEWS
   //
   {
@@ -43,7 +42,7 @@ export const navLinks = [
     categories: [
       {
         name: { en: "Bhojpuri", hi: "भोजपुरी" },
-        path: "/news/bhojpuri",
+        path: "/bhojpuri",
         icon: FaMusic,
         description: {
           en: "Trending Bhojpuri news and entertainment updates.",
@@ -52,7 +51,7 @@ export const navLinks = [
       },
       {
         name: { en: "Business", hi: "व्यापार" },
-        path: "/news/business",
+        path: "/business",
         icon: FaBriefcase,
         description: {
           en: "Latest business, finance and economy news.",
@@ -60,21 +59,30 @@ export const navLinks = [
         },
       },
       {
-        name: { en: "Entertainment", hi: "मनोरंजन" },
-        path: "/news/entertainment",
-        icon: FaTv,
+        name: { en: "Elections", hi: "चुनाव" },
+        path: "/elections",
+        icon: FaVoteYea,
         description: {
-          en: "Bollywood, TV & OTT entertainment updates.",
-          hi: "बॉलीवुड, टीवी और ओटीटी मनोरंजन अपडेट।",
+          en: "Election updates, results and political news.",
+          hi: "चुनाव अपडेट, परिणाम और राजनीतिक समाचार।",
         },
       },
       {
-        name: { en: "Local", hi: "स्थानीय" },
-        path: "/news/local",
-        icon: FaMapMarkerAlt,
+        name: { en: "Technology", hi: "टेक्नोलॉजी" },
+        path: "/technology",
+        icon: FaMicrochip,
         description: {
-          en: "Local city news, reports and latest happenings.",
-          hi: "स्थानीय शहर समाचार, रिपोर्ट और ताज़ा घटनाएँ।",
+          en: "Latest tech news, gadgets and innovations.",
+          hi: "ताज़ा टेक न्यूज़, गैजेट्स और नवाचार।",
+        },
+      },
+      {
+        name: { en: "Education", hi: "शिक्षा" },
+        path: "/education",
+        icon: FaBookOpen,
+        description: {
+          en: "Education news, exams and career updates.",
+          hi: "शिक्षा समाचार, परीक्षा और करियर अपडेट।",
         },
       },
     ],
@@ -130,97 +138,75 @@ export const navLinks = [
   },
 
   //
-  // TECHNOLOGY
+  // ENTERTAINMENT
   //
   {
-    name: { en: "TECHNOLOGY", hi: "टेक्नोलॉजी" },
-    path: "/technology",
-    icon: FaMicrochip,
-    origin: "left",
+    name: { en: "ENTERTAINMENT", hi: "मनोरंजन" },
+    path: "/entertainment",
+    icon: FaTv,
+    origin: "right",
     categories: [
       {
-        name: { en: "Gadgets", hi: "गैजेट्स" },
-        path: "/technology/gadgets",
+        name: { en: "Videos", hi: "वीडियो" },
+        path: "/entertainment/videos",
+        icon: FaVideo,
+        description: {
+          en: "Watch latest viral and trending videos.",
+          hi: "ताज़ा वायरल और ट्रेंडिंग वीडियो देखें।",
+        },
+      },
+      {
+        name: { en: "Shorts", hi: "शॉर्ट्स" },
+        path: "/entertainment/shorts",
         icon: MdSmartphone,
         description: {
-          en: "Latest mobiles, laptops and tech gadgets.",
-          hi: "ताज़ा मोबाइल, लैपटॉप और टेक गैजेट्स।",
+          en: "Quick entertainment bites and shorts.",
+          hi: "त्वरित मनोरंजन बाइट्स और शॉर्ट्स।",
         },
       },
       {
-        name: { en: "AI & Machine Learning", hi: "एआई और मशीन लर्निंग" },
-        path: "/technology/ai-ml",
-        icon: GiBrain,
+        name: { en: "Movies", hi: "फिल्में" },
+        path: "/entertainment/movies",
+        icon: FaFilm,
         description: {
-          en: "AI models, ML research and tech innovations.",
-          hi: "एआई मॉडल, एमएल रिसर्च और टेक नवाचार।",
+          en: "Movie reviews, trailers and cinema news.",
+          hi: "फिल्म समीक्षा, ट्रेलर और सिनेमा समाचार।",
         },
       },
       {
-        name: { en: "Robotics", hi: "रोबोटिक्स" },
-        path: "/technology/robotics",
-        icon: FaPersonBooth,
+        name: { en: "Shows", hi: "शो" },
+        path: "/entertainment/shows",
+        icon: FaTv,
         description: {
-          en: "Robotics engineering, automation & humanoids.",
-          hi: "रोबोटिक्स इंजीनियरिंग, ऑटोमेशन और ह्यूमैनॉइड्स।",
+          en: "TV shows, web series and OTT updates.",
+          hi: "टीवी शो, वेब सीरीज और ओटीटी अपडेट।",
         },
       },
       {
-        name: { en: "Space & Science", hi: "अंतरिक्ष और विज्ञान" },
-        path: "/technology/space-science",
-        icon: GiMaterialsScience,
+        name: { en: "Music", hi: "संगीत" },
+        path: "/entertainment/music",
+        icon: FaMusic,
         description: {
-          en: "ISRO/NASA missions, space research & discoveries.",
-          hi: "इसरो/नासा मिशन, अंतरिक्ष शोध और खोजें।",
-        },
-      },
-    ],
-  },
-
-  //
-  // EDUCATION
-  //
-  {
-    name: { en: "EDUCATION", hi: "शिक्षा" },
-    path: "/education",
-    icon: FaBookOpen,
-    origin: "right",
-
-    categories: [
-      {
-        name: { en: "Exams", hi: "परीक्षाएँ" },
-        path: "/education/exams",
-        icon: PiLaptopBold,
-        description: {
-          en: "Updates on competitive and board exams.",
-          hi: "प्रतियोगी और बोर्ड परीक्षाओं के अपडेट।",
+          en: "Latest songs, albums and music reviews.",
+          hi: "ताज़ा गाने, एल्बम और संगीत समीक्षा।",
         },
       },
       {
-        name: { en: "Results", hi: "परिणाम" },
-        path: "/education/results",
-        icon: FaNewspaper,
+        name: { en: "Radio", hi: "रेडियो" },
+        path: "/entertainment/radio",
+        icon: FaBroadcastTower,
         description: {
-          en: "Latest board, university & entrance results.",
-          hi: "ताज़ा बोर्ड, विश्वविद्यालय और प्रवेश परीक्षा परिणाम।",
+          en: "Live radio stations and podcasts.",
+          hi: "लाइव रेडियो स्टेशन और पॉडकास्ट।",
         },
       },
       {
-        name: { en: "Career", hi: "करियर" },
-        path: "/education/career",
-        icon: FaBrain,
+        name: { en: "Celebrity", hi: "सेलिब्रिटी" },
+        path: "/entertainment/celebrity",
+        icon: FaStar,
         description: {
-          en: "Career guidance, courses & skill development.",
-          hi: "करियर मार्गदर्शन, कोर्स और स्किल डेवलपमेंट।",
-        },
-      },
-      {
-        name: { en: "Scholarships", hi: "स्कॉलरशिप" },
-        path: "/education/scholarships",
-        icon: FaBookOpen,
-        description: {
-          en: "Govt & private scholarship schemes and updates.",
-          hi: "सरकारी और निजी स्कॉलरशिप योजनाएँ और अपडेट।",
+          en: "Celebrity gossip, interviews and lifestyle.",
+          hi: "सेलिब्रिटी गपशप, साक्षात्कार और जीवन शैली।",
         },
       },
     ],
