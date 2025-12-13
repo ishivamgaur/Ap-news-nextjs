@@ -109,7 +109,7 @@ const Navbar = () => {
             <Link href="/" className="flex items-center  group">
               <div className="bg-transparent py-1 rounded flex items-center gap-2 transition-transform duration-300 group-hover:scale-105">
                 <img
-                  src="/ap-news.png"
+                  src="/Ap-news.png"
                   alt="AP News Logo"
                   className="h-12 md:h-10 2xl:h-12 w-auto object-contain"
                 />
