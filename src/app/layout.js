@@ -12,30 +12,24 @@ import Script from "next/script";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// 🖋️ Fonts
-import { Merriweather, Inter, Outfit } from "next/font/google";
+// 🖋️ Fonts (News website combo)
+import { Merriweather, Inter } from "next/font/google";
 
-// 🖋️ Fonts
-const merriweather = Merriweather({
-  variable: "--font-serif",
+const headingFont = Merriweather({
+  variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
+  weight: ["500", "700", "900"],
 });
 
-const inter = Inter({
-  variable: "--font-sans",
+const bodyFont = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: [ "500", "600", "700"],
 });
 
 // 🧠 Metadata (SEO)
 export const metadata = {
-  metadataBase: new URL("https://apnewsbihar.in"), // Replace with your actual domain
+  metadataBase: new URL("https://apnewsbihar.in"),
   title: {
     default: "AP News | Latest Updates",
     template: "%s | AP News",
@@ -64,7 +58,7 @@ export const metadata = {
     siteName: "AP News",
     images: [
       {
-        url: "/Ap-news.png", // Ensure this image exists in public folder
+        url: "/Ap-news.png",
         width: 1200,
         height: 630,
         alt: "AP News Logo",
@@ -77,8 +71,8 @@ export const metadata = {
     card: "summary_large_image",
     title: "AP News | Latest Updates",
     description: "Breaking news, live videos, and updates from AP News.",
-    images: ["/Ap-news.png"], // Ensure this image exists in public folder
-    creator: "@apnews", // Replace with actual handle if available
+    images: ["/Ap-news.png"],
+    creator: "@apnews",
   },
   robots: {
     index: true,
@@ -96,7 +90,7 @@ export const metadata = {
 // 🧱 Root Layout
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${headingFont.variable} ${bodyFont.variable}`}>
       <Head>
         <Script
           async
@@ -105,9 +99,7 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
         ></Script>
       </Head>
-      <body
-        className={`${merriweather.variable} ${inter.variable} ${outfit.variable} antialiased flex flex-col min-h-screen font-outfit bg-gray-50 text-gray-900`}
-      >
+      <body className="antialiased flex flex-col min-h-screen font-body bg-gray-50 text-gray-900">
         <StoreProvider>
           <LanguageProvider>
             <TopBar />
