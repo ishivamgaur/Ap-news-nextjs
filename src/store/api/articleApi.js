@@ -217,6 +217,34 @@ export const articleApiSlice = createApi({
       providesTags: ["Articles"],
     }),
 
+    // GET EDUCATION ARTICLES
+    getEducationArticles: builder.query({
+      query: (page = 1) => ({
+        url: `/articles/category/Education?page=${page}`,
+        method: "get",
+      }),
+      transformResponse: (response) => response,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems, { arg }) => {
+        if (!currentCache?.articles) {
+          return { ...newItems, maxLoadedPage: arg };
+        }
+        if (arg === 1) {
+          return { ...newItems, maxLoadedPage: 1 };
+        }
+        currentCache.articles.push(...newItems.articles);
+        currentCache.maxLoadedPage = Math.max(
+          currentCache.maxLoadedPage || 1,
+          arg
+        );
+      },
+      forceRefetch({ currentArg, previousArg, endpointState }) {
+        const maxLoadedPage = endpointState?.data?.maxLoadedPage || 0;
+        return currentArg > maxLoadedPage;
+      },
+      providesTags: ["Articles"],
+    }),
+
     //! GET ARTICLE-DETAILS BY ID
     getArticleById: builder.query({
       query: (arg) => {
@@ -315,6 +343,7 @@ export const {
   useGetTechnologyArticlesQuery,
   useGetElectionsArticlesQuery,
   useGetSportsArticlesQuery,
+  useGetEducationArticlesQuery,
   useGetArticleByIdQuery,
   useGetVideosArticlesQuery,
   useGetArticlesByCategoryQuery,
