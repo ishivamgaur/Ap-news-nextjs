@@ -4,8 +4,10 @@ import NewsCard from "@/components/NewsCard";
 import NewsCardSkeleton from "@/components/NewsCardSkeleton";
 import VideoModal from "@/components/VideoModal";
 import { useGetSportsArticlesQuery } from "@/store/api/articleApi";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SportsPage = () => {
+  const { language } = useLanguage();
   const [page, setPage] = useState(1);
   const [playingVideo, setPlayingVideo] = useState(null);
   const observer = useRef();
@@ -31,11 +33,14 @@ const SportsPage = () => {
     (node) => {
       if (isFetching) return;
       if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setPage((prev) => prev + 1);
-        }
-      }, { rootMargin: "500px" });
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasMore) {
+            setPage((prev) => prev + 1);
+          }
+        },
+        { rootMargin: "500px" }
+      );
       if (node) observer.current.observe(node);
     },
     [isFetching, hasMore]
@@ -72,6 +77,39 @@ const SportsPage = () => {
                   Scores, matches, and sports news
                 </p>
               </div>
+
+              <div className="mb-8 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-red-50 to-white">
+                  <div className="flex items-center gap-3">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    <h2 className="font-bold text-gray-800 text-lg">
+                      {language === "hi"
+                        ? "लाइव क्रिकेट स्कोर"
+                        : "Live Cricket Scores"}
+                    </h2>
+                  </div>
+                  <span className="text-xs font-bold text-red-600 bg-red-50 px-3 py-1 rounded-full border border-red-100 tracking-wide">
+                    LIVE
+                  </span>
+                </div>
+                <div className="h-[500px] w-full bg-gray-50 relative">
+                  <iframe
+                    src="https://cwidget.crictimes.org/?v=1.1&a=de0c0c"
+                    title={
+                      language === "hi"
+                        ? "लाइव क्रिकेट स्कोर"
+                        : "Live Cricket Scores"
+                    }
+                    className="w-full h-full"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {articles.map((news, i) => (
                   <div
