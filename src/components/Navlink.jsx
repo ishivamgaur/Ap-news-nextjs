@@ -100,7 +100,7 @@ export const navLinks = [
     categories: [
       {
         name: { en: "Cricket", hi: "क्रिकेट" },
-        path: "/sports/cricket",
+        path: "/cricket",
         icon: MdSportsCricket,
         description: {
           en: "Latest cricket matches, players & score updates.",
@@ -109,7 +109,7 @@ export const navLinks = [
       },
       {
         name: { en: "Football", hi: "फुटबॉल" },
-        path: "/sports/football",
+        path: "/football",
         icon: IoFootballSharp,
         description: {
           en: "Football leagues, match results & transfer news.",
@@ -118,7 +118,7 @@ export const navLinks = [
       },
       {
         name: { en: "Hockey", hi: "हॉकी" },
-        path: "/sports/hockey",
+        path: "/hockey",
         icon: MdSportsHockey,
         description: {
           en: "Indian & international hockey match highlights.",
@@ -127,7 +127,7 @@ export const navLinks = [
       },
       {
         name: { en: "Basketball", hi: "बास्केटबॉल" },
-        path: "/sports/basketball",
+        path: "/basketball",
         icon: IoIosBasketball,
         description: {
           en: "NBA, global leagues & basketball news.",
