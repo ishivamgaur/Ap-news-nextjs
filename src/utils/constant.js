@@ -1,3 +1,3 @@
-export const API_BASE_URL = "https://api.apnewsbihar.in/api"
+export const API_BASE_URL = "https://ap-news-b.onrender.com/api"
 
-// "https://ap-news-b.onrender.com/api";
+// "AWS SERVER: https://api.apnewsbihar.in/api";
